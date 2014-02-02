@@ -1,3 +1,4 @@
+import sys
 fields_name = ["timestamps", "program_name", "product_SKU", "request_type",
                "request_url", "client_ip", "query", "request_service", "resource_type",
                "resource_id", "description", "result_count", "response_code",
@@ -89,8 +90,9 @@ def print_avg_time_view_doc(my_dict):
 
 
 def main():
-  load_sections("sample_logfile.txt")
-
+  #load_sections("sample_logfile.txt")
+  for arg in sys.argv:
+    load_sections(arg)
   #print_avg_time_view_doc(fields_dict["timestamps"])
   #print_requests_per_hour(fields_dict)
   #print_dict_list_mode(fields_dict)
