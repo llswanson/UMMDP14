@@ -13,6 +13,9 @@ fields_name = ["timestamps", "program_name", "product_SKU", "request_type",
                "authentication_method", "language", "interface_type", "dumy2",
                "subscription_id", "usage_type", "user_agent"]
 
+
+header = ["Date, ", "Search Count, ", "Research Topic Click"]
+
 file_size = 0
 fields_dict = dict()
 
@@ -87,6 +90,7 @@ def print_avg_time_view_doc(my_dict):
     print item, float(avg_time_info[item][0])/avg_time_info[item][1], avg_time_info[item][1]
   return
 
+
 def get_search_times(my_dict):
   urls = my_dict["request_url"]
   count = 0
@@ -109,12 +113,24 @@ def get_research_topic_click(my_dict):
       continue
   return count
 
+
+def main_helper():
+  str_buff = ""
+  str_buff += str(get_search_times(fields_dict)) + ", "
+  str_buff += str(get_research_topic_click(fields_dict))
+  print str_buff
+  return
+
+
 def main():
-  #load_sections("sample_logfile.txt")
-  for arg in sys.argv:
+
+  for item in header:
+    sys.stdout.write(item)
+  print("")
+
+  for arg in sys.argv[1:]:
+    sys.stdout.write(arg.split('.')[-1] + ", ")
     load_sections(arg)
-  #print_avg_time_view_doc(fields_dict["timestamps"])
-  #print_requests_per_hour(fields_dict)
-  #print_dict_list_mode(fields_dict)
-  print get_research_topic_click(fields_dict)
+    main_helper()
+    
 main();
