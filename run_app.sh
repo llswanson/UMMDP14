@@ -1,13 +1,5 @@
-cd /home/ec2-user/proquest/logfiles/log101
-gunzip *.gz
-python /home/ec2-user/UMMDP14/app_server_parse.py elibdmz-elibweb_usage.log.* > /home/ec2-user/UMMDP14/server101.out
-gzip elibdmz*
-cd /home/ec2-user/proquest/logfiles/log102
-gunzip *.gz
-python /home/ec2-user/UMMDP14/app_server_parse.py elibdmz-elibweb_usage.log.* > /home/ec2-user/UMMDP14/server102.out
-gzip elibdmz*
-cd /home/ec2-user/proquest/logfiles/log103
-gunzip *.gz
-python /home/ec2-user/UMMDP14/app_server_parse.py elibdmz-elibweb_usage.log.* > /home/ec2-user/UMMDP14/server103.out
-gzip elibdmz*
-
+python /home/ec2-user/UMMDP14/app_server_parse.py  
+/home/ec2-user/ummdp/logfiles/101/app/2013/* /home/ec2-user/ummdp/logfiles/101/app/2014/* 
+/home/ec2-user/ummdp/logfiles/102/app/2013/* /home/ec2-user/ummdp/logfiles/102/app/2014/*
+/home/ec2-user/ummdp/logfiles/103/app/2013/* /home/ec2-user/ummdp/logfiles/103/app/2014/* 
+> /home/ec2-user/UMMDP14/app_server_output/app_server.out
