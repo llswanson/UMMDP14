@@ -10,7 +10,7 @@ end='*'
 app=''
 serv=''
 appout='result/app_out_2013_'
-servout='result/2014/serv_out_2013_'
+servout='apache_output/2013/serv_out_2014_'
 #cd $dir
 for ((i=0;i<2;i++)) do
     month=$(($i+1))
