@@ -44,7 +44,7 @@ def load_sections(filename):
 
 def print_binder():
   for item in binder_date:
-    print item, binder[item][0], binder[item][1]
+    print item, ",", binder[item][0], "," ,binder[item][1]
 
 
 def main():
