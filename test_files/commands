@@ -1,0 +1,7 @@
+sudo ssh -i /Users/hongbo/Desktop/proquest/logfiles/gps-ummdp.pem ec2-user@54.197.182.156
+
+aws s3 ls s3://gps-ummdp/elibrary/101/
+
+aws s3 cp s3://gps-ummdp/elibrary/101/ . --recursive --region us-east-1
+
+sudo scp logfiles.tar.gz hongboso@login.engin.umich.edu:/afs/umich.edu/user/h/o/hongboso/Desktop
