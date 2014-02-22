@@ -101,6 +101,7 @@ def main():
     '''
     file13 = 'elibrary.bigchalk.com-access_log.13'
     file14 = 'elibrary.bigchalk.com-access_log.14'
+    '''
     for x in range(1,13):
         month = "%02d" %(x)
         for y in range (1,32):
@@ -108,18 +109,19 @@ def main():
                 file1 = dir1+file13+month+date
                 file2 = dir2+file13+month+date
                 file3 = dir3+file13+month+date
-                '''
+                
                 file4 = dirh1+file14+month+date
                 file5 = dirh2+file14+month+date
                 file6 = dirh3+file14+month+date
-                '''
+                
                 if (os.path.exists(file1) and os.path.exists(file2) and os.path.exists(file3)):
                         load_a_day(file1,file2,file3)
                         print_expand_result('13',month,date)
+    '''
 
     for x in range(1,13):
         month = "%02d" %(x)
-        for y in range (10,32):   #changed for new run 0222
+        for y in range (1,32):   
                 date = "%02d" %(y)
                 file1 = dir4+file14+month+date
                 file2 = dir5+file14+month+date
