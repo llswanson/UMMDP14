@@ -119,7 +119,7 @@ def main():
 
     for x in range(1,13):
         month = "%02d" %(x)
-        for y in range (1,32):
+        for y in range (10,32):   #changed for new run 0222
                 date = "%02d" %(y)
                 file1 = dir4+file14+month+date
                 file2 = dir5+file14+month+date
