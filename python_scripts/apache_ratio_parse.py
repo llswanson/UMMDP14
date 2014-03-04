@@ -81,8 +81,10 @@ def get_search_time(my_dict):
     urls = my_dict["referrer_url"]
     count = 0
     for url in urls:
-        search_url = "/do/search?set=search"
-        if url.find(search_url) != -1:
+        search_url = "/do/results?set=search"
+        search_tag = "start=1"
+
+        if url.find(search_url) != -1 and url.find(search_tag) != -1:
             count += 1
         else: 
             continue
