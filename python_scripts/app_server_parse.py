@@ -92,7 +92,7 @@ def get_search_times(my_dict):
   urls = my_dict["request_url"]
   count = 0
   for url in urls:
-    search_url = "do/results"
+    search_url = "/do/search?set=search"
     if url.find(search_url) != -1:
       count += 1
     else:

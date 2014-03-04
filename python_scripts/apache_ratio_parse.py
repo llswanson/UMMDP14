@@ -64,11 +64,24 @@ def get_index_time(my_dict):
             continue
     return count
 
+'''
 def get_search_time(my_dict):
     urls = my_dict["referrer_url"]
     count = 0
     for url in urls:
         search_url = "/do/results?"
+        if url.find(search_url) != -1:
+            count += 1
+        else: 
+            continue
+    return count
+'''
+
+def get_search_time(my_dict):
+    urls = my_dict["referrer_url"]
+    count = 0
+    for url in urls:
+        search_url = "/do/search?set=search"
         if url.find(search_url) != -1:
             count += 1
         else: 
