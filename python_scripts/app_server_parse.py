@@ -87,7 +87,7 @@ def print_avg_time_view_doc(my_dict):
     print item, float(avg_time_info[item][0])/avg_time_info[item][1], avg_time_info[item][1]
   return
 
-
+'''
 def get_search_times(my_dict):
   urls = my_dict["request_url"]
   count = 0
@@ -96,6 +96,20 @@ def get_search_times(my_dict):
     if url.find(search_url) != -1:
       count += 1
     else:
+      continue
+  return count
+'''
+
+def get_search_time(my_dict):
+  urls = my_dict["request_url"]
+  count = 0
+  for url in urls:
+    search_url = "/do/results?set=search"
+    search_tag = "start=1"
+
+    if url.find(search_url) != -1 and url.find(search_tag) != -1:
+      count += 1
+    else: 
       continue
   return count
 
