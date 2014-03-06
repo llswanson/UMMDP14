@@ -6,7 +6,8 @@ import os
 fields_name = ["client_ip", "timestamp", "http_first_line", "http_status", "response_size",
                              "referrer_url", "user_agent", "time_respond"]
 
-header = ["Date, ", "Expand_Button_Click, ", "Research_Topic_Show, ", "Search_Count, ", "R/E"]
+header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ",
+       "R/S, ", "E/R"]
 
 file_size = 0
 fields_dict = dict()
@@ -17,7 +18,7 @@ def load_sections(filename):
     for line in region_file:
         line = line.strip()
         fields = re.split("[\s]+", line)
-        '''fields_dict["client_ip"].append(fields[0])
+        '''fields_dict["client_ip"].append(fields[0]) 
         fields_dict["timestamp"].append(fields[3])'''
         fields_dict["http_first_line"].append(fields[5] + " " + fields[6] + " " + fields[7])
         '''fields_dict["http_status"].append(fields[8])
@@ -103,7 +104,8 @@ def print_expand_result(year, month, date):
     num1 = get_expand_time(fields_dict)
     num2 = get_index_time(fields_dict)
     num3 = get_search_time(fields_dict) 
-    print year+"-"+month+"-"+date+", "+str(num1)+", "+str(num2)+", "+str(num3)+", "+str((num2+0.0)/num3)
+    print year+"-"+month+"-"+date+", "+str(num1)+", "+str(num2)+", "+str(num3)+
+        ", "+"%.3f"%((num2+0.0)/num3)+", "+"%.3f"%((num1+0.0)/num2)
     return
 
 def main():
