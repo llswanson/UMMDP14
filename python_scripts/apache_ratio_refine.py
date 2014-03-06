@@ -104,8 +104,7 @@ def print_expand_result(year, month, date):
     num1 = get_expand_time(fields_dict)
     num2 = get_index_time(fields_dict)
     num3 = get_search_time(fields_dict) 
-    print year+"-"+month+"-"+date+", "+str(num1)+", "+str(num2)+", "+str(num3)+
-        ", "+"%.3f"%((num2+0.0)/num3)+", "+"%.3f"%((num1+0.0)/num2)
+    print year+"-"+month+"-"+date+", "+str(num1)+", "+str(num2)+", "+str(num3)+", "+"%.3f"%((num2+0.0)/num3)+", "+"%.3f"%((num1+0.0)/num2)
     return
 
 def main():
