@@ -100,7 +100,7 @@ def get_search_times(my_dict):
   return count
 '''
 
-def get_search_time(my_dict):
+def get_search_times(my_dict):
   urls = my_dict["request_url"]
   count = 0
   for url in urls:
