@@ -100,7 +100,7 @@ def get_search_times(my_dict):
   return count
 '''
 
-def get_search_time(my_dict):
+def get_search_times(my_dict):
   urls = my_dict["request_url"]
   count = 0
   for url in urls:
@@ -179,9 +179,9 @@ def main():
         for y in range (1,32):
                 date = "%02d" %(y)
 
-                file1 = dirh1+file14+month+"-"+date
-                file2 = dirh2+file14+month+"-"+date
-                file3 = dirh3+file14+month+"-"+date
+                file1 = dir4+file14+month+"-"+date
+                file2 = dir5+file14+month+"-"+date
+                file3 = dir6+file14+month+"-"+date
                 
                 if (os.path.exists(file1) and os.path.exists(file2) and os.path.exists(file3)):
                         load_a_day(file1,file2,file3)
