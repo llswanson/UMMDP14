@@ -102,17 +102,20 @@ def get_search_times(my_dict):
 
 def get_search_times(my_dict):
   urls = my_dict["request_url"]
+  types = my_dict["request_type"]
   count = 0
-  for url in urls:
-    '''search_url = "/do/results?set=search"
+  #for url in urls:
+  for i in range (0,len(urls)):
+    '''
+    search_url = "/do/results?set=search"
     search_tag = "start=1"
-
     if url.find(search_url) != -1 and url.find(search_tag) != -1:
       count += 1
     else: 
       continue'''
-    search_url = "/do/search"
-    if url.find(search_url) != -1:
+    search_url1 = "/do/search"
+    search_url2 = "POST"
+    if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1:
         count += 1
   return count
 
