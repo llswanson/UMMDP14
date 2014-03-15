@@ -3,16 +3,15 @@ import csv
 import re
 import os
 
-fields_name = ["client_ip", "timestamp", "http_first_line", "http_status", "response_size",
-                             "referrer_url", "user_agent", "time_respond"]
-
 header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ", "Advance_Search_Count(A), ",
-       "R/S, ", "E/R, ", "A/S"]
+          "Core_Correalation_Click, ","R/S, ", "E/R, ", "A/S"]
 
 expand_count = 0
 rs_show_count = 0
 search_count = 0
 advance_search_count = 0
+core_correlation_click_count = 0
+
 
 def load_sections(filename):
     region_file = open(filename, 'r')
@@ -36,12 +35,6 @@ def load_a_day(file_list):
 	    load_sections(file)
     return
 
-# list dictionary in list mode
-def print_dict_list_mode(my_dict):
-    for field in fields_name:
-        print field, ": " ,my_dict[field]
-    return
-
 # Count that research topic expanded
 def get_expand_time(url):
     global expand_count
@@ -57,7 +50,6 @@ def get_index_time(url):
     if url.find(search_url) != -1:
        rs_show_count += 1
     return
-
 
 # Count that a search is conducted
 def get_search_time(referrer_url, http_first_line):
@@ -78,30 +70,38 @@ def get_advance_search_time(url):
         advance_search_count += 1
     return
 
+# Count core correlation click times
+def get_core_corre_time(url):
+    global core_correlation_click_count
+    search_url = "/teacherweb/elib/do/standards" 
+    if url.find(search_url) = -1:
+        core_correlation_click_count += 1
+    return
+
 
 def print_result(year, month, date):
     global expand_count
     global search_count
     global rs_show_count
-    global advance_search_count;
+    global advance_search_count
+    global core_correlation_click_count
     
     sys.stdout.write(year + "-" + month + "-" + date + ", ")
     sys.stdout.write(str(expand_count) + ", ")
     sys.stdout.write(str(rs_show_count) + ", ")
     sys.stdout.write(str(search_count) + ", ")
     sys.stdout.write(str(advance_search_count) + ", ")
+    sys.stdout.write(str(core_correlation_click_count) + ", ")
     sys.stdout.write("%.3f"%((rs_show_count+0.0)/search_count) + ", ")
     sys.stdout.write("%.3f"%((expand_count+0.0)/rs_show_count) + ", ")
     sys.stdout.write("%.3f"%((advance_search_count+0.0)/search_count))
     sys.stdout.write("\n")
 
-    
-    #print year+"-"+month+"-"+date+", "+str(expand_count)+", "+str(rs_show_count)+", "+str(search_count)+", "+str(advance_search_count)+"%.3f"%((rs_show_count+0.0)/search_count)+", "+"%.3f"%((expand_count+0.0)/rs_show_count)
-    
     expand_count = 0
     search_count = 0
     rs_show_count = 0
     advance_search_count = 0
+    core_correlation_click_count = 0
     return
 
 def main():
