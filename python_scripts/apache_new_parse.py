@@ -87,20 +87,12 @@ def get_search_time(my_dict):
     refs = my_dict["referrer_url"]
     urls = my_dict["http_first_line"]
     count = 0
-    '''
-    for url in urls:
-        search_url = "/do/results?set=search"
-        search_tag = "start=1"
-
-        if url.find(search_url) != -1 and url.find(search_tag) != -1:
-            count += 1
-        else: 
-            continue'''
+  
     #for url in urls:
     for i in range (0,len(urls)):
         search_url1 = "/do/search?"
-    search_url2 = "POST"
-    search_url3 = "capload1.umi.com"
+        search_url2 = "POST"
+        search_url3 = "capload1.umi.com"
         if urls[i].find(search_url1) != -1 and urls[i].find(search_url2) != -1 and refs[i].find(search_url3) == -1:
             count += 1
     return count
@@ -147,7 +139,7 @@ def main():
 		file_list = []
 		for i in range (0, server_num):
 		    file_list.append(directories[year][i] + file_prefix + year[2:] + month + date)
-		    print (directories[year][i] + file_prefix + year[2:] + month + date)
+		    #print (directories[year][i] + file_prefix + year[2:] + month + date)
                 
                 load_a_day(file_list)
                 print_expand_result(year, month, date)
