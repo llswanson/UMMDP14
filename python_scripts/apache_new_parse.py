@@ -95,8 +95,6 @@ def print_expand_result(year, month, date):
 
 def main():
 
-    server_num = raw_input("");
-
     header_str = ""
     for item in header:
         header_str += item
@@ -110,8 +108,7 @@ def main():
     directories = []
     #for it in server_names:
 
-    print server_num
-
+    print sys.argv[1]
 
     '''
     dir1 = '/home/ec2-user/ummdp/logfiles/101/apache_access/2013/'
