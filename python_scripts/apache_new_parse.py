@@ -25,6 +25,7 @@ def load_sections(filename):
 	get_expand_time(http_first_line)
 	get_index_time(http_first_line)
         get_search_time(referrer_url, http_first_line)
+        get_advance_search_time(http_first_line)
 
     region_file.close()
     return
@@ -41,7 +42,7 @@ def print_dict_list_mode(my_dict):
         print field, ": " ,my_dict[field]
     return
 
-# Time that research topic expanded
+# Count that research topic expanded
 def get_expand_time(url):
     global expand_count
     search_url = "logevent?eventName=expandspdocframe"
@@ -49,7 +50,7 @@ def get_expand_time(url):
         expand_count += 1
     return
 
-# Time that research topic exist for a search
+# Count that research topic exist for a search
 def get_index_time(url):
     global rs_show_count
     search_url = "index.html?mylist="
@@ -58,7 +59,7 @@ def get_index_time(url):
     return
 
 
-# Time that a search is conducted
+# Count that a search is conducted
 def get_search_time(referrer_url, http_first_line):
     global search_count
     search_url1 = "/do/search?"
@@ -68,19 +69,36 @@ def get_search_time(referrer_url, http_first_line):
         search_count += 1
     return
 
+# Count that a advance search is conducted
+def get_advance_search_time(url):
+    global advance_search_count
+    search_url1 = "/do/search?"
+    search_url2 = "secondaryNav=advance"
+    if url.find(search_url1) != -1 and url.find(search_url2) != -1:
+        advance_search_count += 1
+    return
+
+
 def print_result(year, month, date):
     global expand_count
     global search_count
     global rs_show_count
     global advance_search_count;
+    
+    sys.stdout.write(year + "-" + month + "-" + date + ", ")
+    sys.stdout.write(str(expand_count) + ", ")
+    sys.stdout.write(str(rs_show_count) + ", ")
+    sys.stdout.write(str(search_count) + ", ")
+    sys.stdout.write(str(advance_search_count) + ", ")
+    sys.stdout.write("%.3f"%((rs_show_count+0.0)/search_count) + ", ")
+    sys.stdout.write("%.3f"%((expand_count+0.0)/rs_show_count)
+    print("")
+
     '''
-    num1 = get_expand_time(fields_dict)
-    num2 = get_index_time(fields_dict)
-    num3 = get_search_time(fields_dict)
+    print year+"-"+month+"-"+date+", "+str(expand_count)+", "+str(rs_show_count)+
+    ", "+str(search_count)+", "+str(advance_search_count)+
+    "%.3f"%((rs_show_count+0.0)/search_count)+", "+"%.3f"%((expand_count+0.0)/rs_show_count)
     '''
-    sys.stdout.write
- 
-    print year+"-"+month+"-"+date+", "+str(expand_count)+", "+str(rs_show_count)+", "+str(search_count)+", "+str(advance_search_count)+"%.3f"%((rs_show_count+0.0)/search_count)+", "+"%.3f"%((expand_count+0.0)/rs_show_count)
     expand_count = 0
     search_count = 0
     rs_show_count = 0
