@@ -9,8 +9,9 @@ fields_name = ["client_ip", "timestamp", "http_first_line", "http_status", "resp
 header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ",
        "R/S, ", "E/R"]
 
-file_size = 0
-fields_dict = dict()
+expand_count = 0
+rs_show_count = 0
+search_count = 0
 
 def load_sections(filename):
     region_file = open(filename, 'r')
@@ -18,25 +19,20 @@ def load_sections(filename):
     for line in region_file:
         line = line.strip()
         fields = re.split("[\s]+", line)
-        fields_dict["http_first_line"].append(fields[5] + " " + fields[6] + " " + fields[7])
-        fields_dict['referrer_url'].append(fields[10])
+        http_first_line = fields[5] + " " + fields[6] + " " + fields[7]
+        referrer_url = fields[10]
+	get_expand_time(http_first_line)
+	get_index_time(http_first_line)
+        get_search_time(referrer_url, http_first_line)
+
     region_file.close()
     return
 
 def load_a_day(file_list):
-    index = 0  
-    for x in fields_name:
-        fields_dict[fields_name[index]] = []
-        index += 1  
-
     for file in file_list:
     	if (os.path.exists(file)):
 	    load_sections(file)
     return
-    #load_sections(filename1)
-    #load_sections(filename2)
-    #load_sections(filename3)
-    #return
 
 # list dictionary in list mode
 def print_dict_list_mode(my_dict):
@@ -45,51 +41,45 @@ def print_dict_list_mode(my_dict):
     return
 
 # Time that research topic expanded
-def get_expand_time(my_dict):
-    urls = my_dict["http_first_line"]
-    count = 0
-    for url in urls:
-        search_url = "logevent?eventName=expandspdocframe"
-        if url.find(search_url) != -1:
-            count += 1
-        else:
-            continue
-    return count
+def get_expand_time(url):
+    global expand_count
+    search_url = "logevent?eventName=expandspdocframe"
+    if url.find(search_url) != -1:
+        expand_count += 1
+    return
 
 # Time that research topic exist for a search
-def get_index_time(my_dict):
-    #urls = my_dict["referrer_url"]
-    urls = my_dict["http_first_line"]
-    count = 0
-    for url in urls:
-        search_url = "index.html?mylist="
-        if url.find(search_url) != -1:
-            count += 1
-        else:
-            continue
-    return count
+def get_index_time(url):
+    global rs_show_count
+    search_url = "index.html?mylist="
+    if url.find(search_url) != -1:
+       rs_show_count += 1
+    return
 
 
 # Time that a search is conducted
-def get_search_time(my_dict):
-    refs = my_dict["referrer_url"]
-    urls = my_dict["http_first_line"]
-    count = 0
-  
-    #for url in urls:
-    for i in range (0,len(urls)):
-        search_url1 = "/do/search?"
-        search_url2 = "POST"
-        search_url3 = "capload1.umi.com"
-        if urls[i].find(search_url1) != -1 and urls[i].find(search_url2) != -1 and refs[i].find(search_url3) == -1:
-            count += 1
-    return count
+def get_search_time(referrer_url, http_first_line):
+    global search_count
+    search_url1 = "/do/search?"
+    search_url2 = "POST"
+    search_url3 = "capload1.umi.com"
+    if http_first_line.find(search_url1) != -1 and http_first_line.find(search_url2) != -1 and referrer_url.find(search_url3) == -1:
+        search_count += 1
+    return
 
-def print_expand_result(year, month, date):
+def print_result(year, month, date):
+    global expand_count
+    global search_count
+    global rs_show_count
+    '''
     num1 = get_expand_time(fields_dict)
     num2 = get_index_time(fields_dict)
-    num3 = get_search_time(fields_dict) 
-    print year+"-"+month+"-"+date+", "+str(num1)+", "+str(num2)+", "+str(num3)+", "+"%.3f"%((num2+0.0)/num3)+", "+"%.3f"%((num1+0.0)/num2)
+    num3 = get_search_time(fields_dict)
+    ''' 
+    print year+"-"+month+"-"+date+", "+str(expand_count)+", "+str(rs_show_count)+", "+str(search_count)+", "+"%.3f"%((rs_show_count+0.0)/search_count)+", "+"%.3f"%((expand_count+0.0)/rs_show_count)
+    expand_count = 0
+    search_count = 0
+    rs_show_count = 0
     return
 
 def main():
@@ -127,10 +117,9 @@ def main():
 		file_list = []
 		for i in range (0, server_num):
 		    file_list.append(directories[year][i] + file_prefix + year[2:] + month + date)
-		    #print (directories[year][i] + file_prefix + year[2:] + month + date)
                 
                 load_a_day(file_list)
-                print_expand_result(year, month, date)
+                print_result(year, month, date)
 
     
 
