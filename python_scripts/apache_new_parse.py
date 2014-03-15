@@ -6,12 +6,13 @@ import os
 fields_name = ["client_ip", "timestamp", "http_first_line", "http_status", "response_size",
                              "referrer_url", "user_agent", "time_respond"]
 
-header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ",
+header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ", "Advance_Search_Count ",
        "R/S, ", "E/R"]
 
 expand_count = 0
 rs_show_count = 0
 search_count = 0
+advance_search_count = 0
 
 def load_sections(filename):
     region_file = open(filename, 'r')
@@ -71,15 +72,19 @@ def print_result(year, month, date):
     global expand_count
     global search_count
     global rs_show_count
+    global advance_search_count;
     '''
     num1 = get_expand_time(fields_dict)
     num2 = get_index_time(fields_dict)
     num3 = get_search_time(fields_dict)
-    ''' 
-    print year+"-"+month+"-"+date+", "+str(expand_count)+", "+str(rs_show_count)+", "+str(search_count)+", "+"%.3f"%((rs_show_count+0.0)/search_count)+", "+"%.3f"%((expand_count+0.0)/rs_show_count)
+    '''
+    sys.stdout.write
+ 
+    print year+"-"+month+"-"+date+", "+str(expand_count)+", "+str(rs_show_count)+", "+str(search_count)+", "+str(advance_search_count)+"%.3f"%((rs_show_count+0.0)/search_count)+", "+"%.3f"%((expand_count+0.0)/rs_show_count)
     expand_count = 0
     search_count = 0
     rs_show_count = 0
+    advance_search_count = 0
     return
 
 def main():
