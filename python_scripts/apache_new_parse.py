@@ -4,14 +4,15 @@ import re
 import os
 
 header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ", "Advance_Search_Count(A), ",
-          "Core_Correalation_Click, ","R/S, ", "E/R, ", "A/S"]
+          "Core_Correalation_Click, ", "Exit_Button_Click, ", "Educator_Tool_Click, " "R/S, ", "E/R, ", "A/S"]
 
 expand_count = 0
 rs_show_count = 0
 search_count = 0
 advance_search_count = 0
 core_correlation_click_count = 0
-
+exit_click_count = 0
+educator_tool_click_count = 0
 
 def load_sections(filename):
     region_file = open(filename, 'r')
@@ -26,6 +27,8 @@ def load_sections(filename):
         get_search_time(referrer_url, http_first_line)
         get_advance_search_time(http_first_line)
         get_core_corre_time(http_first_line)
+        get_exit_click_time(http_first_line)
+        get_educator_tool_click_time(http_first_line)
 
     region_file.close()
     return
@@ -79,6 +82,22 @@ def get_core_corre_time(url):
         core_correlation_click_count += 1
     return
 
+# Count exit button (top right corner) click times
+def get_exit_click_time(url):
+    global exit_click_count
+    search_url = "/do/logoff?" 
+    if url.find(search_url) != -1:
+        exit_click_count += 1
+    return
+
+# Count Educator tool click time 
+def get_educator_tool_click_time(url):
+    global educator_tool_click_count
+    search_url = "/do/educatorstool?"
+    if url.find(search_url) != -1:
+        educator_tool_click_count += 1
+    return
+
 
 def print_result(year, month, date):
     global expand_count
@@ -86,6 +105,8 @@ def print_result(year, month, date):
     global rs_show_count
     global advance_search_count
     global core_correlation_click_count
+    global exit_click_count
+    global educator_tool_click_count
     
     sys.stdout.write(year + "-" + month + "-" + date + ", ")
     sys.stdout.write(str(expand_count) + ", ")
@@ -93,6 +114,8 @@ def print_result(year, month, date):
     sys.stdout.write(str(search_count) + ", ")
     sys.stdout.write(str(advance_search_count) + ", ")
     sys.stdout.write(str(core_correlation_click_count) + ", ")
+    sys.stdout.write(str(exit_click_count) + ", ")
+    sys.stdout.write(str(educator_tool_click_count) + ", ")
     sys.stdout.write("%.3f"%((rs_show_count+0.0)/search_count) + ", ")
     sys.stdout.write("%.3f"%((expand_count+0.0)/rs_show_count) + ", ")
     sys.stdout.write("%.3f"%((advance_search_count+0.0)/search_count))
@@ -103,6 +126,8 @@ def print_result(year, month, date):
     rs_show_count = 0
     advance_search_count = 0
     core_correlation_click_count = 0
+    exit_click_count = 0
+    educator_tool_click_count = 0
     return
 
 def main():
