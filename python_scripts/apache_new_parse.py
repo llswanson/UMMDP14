@@ -3,8 +3,8 @@ import csv
 import re
 import os
 
-fields_name = ["client_ip", "timestamp", "http_first_line", "http_status", "response_size",
-                             "referrer_url", "user_agent", "time_respond"]
+#fields_name = ["client_ip", "timestamp", "http_first_line", "http_status", "response_size",
+#                             "referrer_url", "user_agent", "time_respond"]
 
 header = ["Date, ", "Expand_Button_Click, ", "Research_Topic_Show, ", "Search_Count, ", "R/E"]
 
@@ -22,21 +22,20 @@ def load_sections(filename):
     region_file.close()
     return
 
-def load_a_day(filename1,filename2,filename3):
-    index = 0
-    for x in fields_name:
-        fields_dict[fields_name[index]] = []
-        index += 1
-    load_sections(filename1)
-    load_sections(filename2)
-    load_sections(filename3)
-    return
+def load_a_day(file_list):
+    index = 0    
 
-# list dictionary in list mode
-def print_dict_list_mode(my_dict):
-    for field in fields_name:
-        print field, ": " ,my_dict[field]
+    for file in file_list:
+    	for x in fields_name:
+      	fields_dict[fields_name[index]] = []
+      	index += 1
+    	if (os.path.exists(file)):
+	    load_sections(file)
     return
+    #load_sections(filename1)
+    #load_sections(filename2)
+    #load_sections(filename3)
+    #return
 
 def get_expand_time(my_dict):
     urls = my_dict["http_first_line"]
@@ -59,19 +58,6 @@ def get_index_time(my_dict):
         else:
             continue
     return count
-
-'''
-def get_search_time(my_dict):
-    urls = my_dict["referrer_url"]
-    count = 0
-    for url in urls:
-        search_url = "/do/results?"
-        if url.find(search_url) != -1:
-            count += 1
-        else: 
-            continue
-    return count
-'''
 
 def get_search_time(my_dict):
     urls = my_dict["referrer_url"]
@@ -144,7 +130,6 @@ def main():
                 file2 = dir5+file14+month+date
                 file3 = dir6+file14+month+date
 
-                if (os.path.exists(file1) and os.path.exists(file2) and os.path.exists(file3)):
                         load_a_day(file1,file2,file3)
                         print_expand_result('14',month,date)
     return
