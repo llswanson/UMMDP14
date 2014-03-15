@@ -100,44 +100,46 @@ def main():
         header_str += item
     print header_str
 
+    server_num = int(sys.argv[1])
     server_names = []
-    for i in range (0, 15):
+    for i in range (0, server_num):
         my_server = 101 + i
         server_names.append(str(my_server))
 
-    directories = []
-    #for it in server_names:
+    log_years = []
+    for year in range(2, len(sys.argv)):
+	log_years.append(sys.argv[year])
 
-    print sys.argv[1]
+    file_prefix = 'elibrary.bigchalk.com-access_log.'
+    dir_prefix = '/home/ec2-user/ummdp/logfiles/'
+    directories = dict()
 
-    '''
-    dir1 = '/home/ec2-user/ummdp/logfiles/101/apache_access/2013/'
-    dir2 = '/home/ec2-user/ummdp/logfiles/102/apache_access/2013/'
-    dir3 = '/home/ec2-user/ummdp/logfiles/103/apache_access/2013/'
-    dir4 = '/home/ec2-user/ummdp/logfiles/101/apache_access/2014/'
-    dir5 = '/home/ec2-user/ummdp/logfiles/102/apache_access/2014/'
-    dir6 = '/home/ec2-user/ummdp/logfiles/103/apache_access/2014/'
+    for year in log_years:
+        directories[year] = []
+    	for it in server_names:
+	    single_dir_name = dir_prefix + it + "/apache_access/" + year + "/"
+	    directories[year].append(single_dir_name)
 
-    file13 = 'elibrary.bigchalk.com-access_log.13'
-    file14 = 'elibrary.bigchalk.com-access_log.14'
-    
-
-    for x in range(1,13):
-        month = "%02d" %(x)
-        for y in range (1,32):
+    for year in log_years:
+    	for x in range(1,13):
+            month = "%02d" %(x)
+            for y in range (1,32):
                 date = "%02d" %(y)
-                file1 = dir1+file13+month+date
-                file2 = dir2+file13+month+date
-                file3 = dir3+file13+month+date
-                if (os.path.exists(file1) and os.path.exists(file2) and os.path.exists(file3)):
-                        load_a_day(file1,file2,file3)
-                        print_expand_result('13',month,date)
-    
+		file_list = []
+		for i in range (0, server_num):
+		    file_list.append(directories[year][i] + file_prefix + year[2:] + month + date)
+		    print (directories[year][i] + file_prefix + year[2:] + month + date)
+                
+                load_a_day(file_list)
+                print_expand_result(year, month, date)
 
+    
+'''
     for x in range(1,13):
         month = "%02d" %(x)
         for y in range (1,32):   
                 date = "%02d" %(y)
+		
                 file1 = dir4+file14+month+date
                 file2 = dir5+file14+month+date
                 file3 = dir6+file14+month+date
@@ -145,7 +147,7 @@ def main():
                 if (os.path.exists(file1) and os.path.exists(file2) and os.path.exists(file3)):
                         load_a_day(file1,file2,file3)
                         print_expand_result('14',month,date)
-    '''
     return
+'''
 
 main();
