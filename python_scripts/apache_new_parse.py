@@ -25,6 +25,7 @@ def load_sections(filename):
 	get_index_time(http_first_line)
         get_search_time(referrer_url, http_first_line)
         get_advance_search_time(http_first_line)
+        get_core_corre_time(http_first_line)
 
     region_file.close()
     return
@@ -74,7 +75,7 @@ def get_advance_search_time(url):
 def get_core_corre_time(url):
     global core_correlation_click_count
     search_url = "/teacherweb/elib/do/standards" 
-    if url.find(search_url) = -1:
+    if url.find(search_url) != -1:
         core_correlation_click_count += 1
     return
 
