@@ -69,18 +69,6 @@ def get_index_time(my_dict):
             continue
     return count
 
-'''
-def get_search_time(my_dict):
-    urls = my_dict["referrer_url"]
-    count = 0
-    for url in urls:
-        search_url = "/do/results?"
-        if url.find(search_url) != -1:
-            count += 1
-        else: 
-            continue
-    return count
-'''
 
 # Time that a search is conducted
 def get_search_time(my_dict):
@@ -145,19 +133,5 @@ def main():
                 print_expand_result(year, month, date)
 
     
-'''
-    for x in range(1,13):
-        month = "%02d" %(x)
-        for y in range (1,32):   
-                date = "%02d" %(y)
-		
-                file1 = dir4+file14+month+date
-                file2 = dir5+file14+month+date
-                file3 = dir6+file14+month+date
-
-                        load_a_day(file1,file2,file3)
-                        print_expand_result('14',month,date)
-    return
-'''
 
 main();
