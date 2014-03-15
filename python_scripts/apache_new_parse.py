@@ -4,7 +4,7 @@ import re
 import os
 
 header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ", "Advance_Search_Count(A), ",
-          "Core_Correalation_Click, ", "Exit_Button_Click, ", "Educator_Tool_Click, " "R/S, ", "E/R, ", "A/S"]
+          "Core_Correalation_Click, ", "Exit_Button_Click, ", "Educator_Tool_Click, ","My_List_Click, ","Bookcarts_Click, ","Slideshows_Click, ","Timelines_Click, ","Quizzes_Click, ", "R/S, ", "E/R, ", "A/S"]
 
 expand_count = 0
 rs_show_count = 0
@@ -13,6 +13,11 @@ advance_search_count = 0
 core_correlation_click_count = 0
 exit_click_count = 0
 educator_tool_click_count = 0
+mylist_count = 0
+bookcarts_count = 0
+slideshows_count = 0
+timelines_count = 0
+quizzes_count = 0
 
 def load_sections(filename):
     region_file = open(filename, 'r')
@@ -29,6 +34,11 @@ def load_sections(filename):
         get_core_corre_time(http_first_line)
         get_exit_click_time(http_first_line)
         get_educator_tool_click_time(http_first_line)
+	get_mylist_click(http_first_line)
+	get_bookcarts_click(http_first_line)
+	get_slideshows_click(http_first_line)
+	get_timelines_click(http_first_line)
+	get_quizzes_click(http_first_line)
 
     region_file.close()
     return
@@ -98,6 +108,47 @@ def get_educator_tool_click_time(url):
         educator_tool_click_count += 1
     return
 
+# Count My List click time
+def get_mylist_click(url):
+    global mylist_count
+    search_url = "/do/results?"
+    search_url2 = "set=mylist"
+    if url.find(search_url) != -1 and url.find(search_url2) != -1:
+        mylist_count += 1
+    return
+
+# Count Bookcarts click time
+def get_bookcarts_click(url):
+    global bookcarts_count
+    search_url = "/do/results?"
+    search_url2 = "set=bookcartlist"
+    if url.find(search_url) != -1 and url.find(search_url2) != -1:
+        bookcarts_count += 1
+    return
+
+# Count Slideshows click time
+def get_slideshows_click(url):
+    global slideshows_count
+    search_url = "/do/slideshows?"
+    if url.find(search_url) != -1:
+        slideshows_count += 1
+    return
+
+# Count Timelines click time
+def get_timelines_click(url):
+    global timelines_count
+    search_url = "/do/timelines?"
+    if url.find(search_url) != -1:
+        timelines_count += 1
+    return
+
+# Count Quizzes click time
+def get_quizzes_click(url):
+    global quizzes_count 
+    search_url = "/do/quiz?"
+    if url.find(search_url) != -1:
+        quizzes_count += 1
+    return
 
 def print_result(year, month, date):
     global expand_count
@@ -107,6 +158,11 @@ def print_result(year, month, date):
     global core_correlation_click_count
     global exit_click_count
     global educator_tool_click_count
+    global mylist_count
+    global bookcarts_count
+    global slideshows_count
+    global timelines_count
+    global quizzes_count
     
     sys.stdout.write(year + "-" + month + "-" + date + ", ")
     sys.stdout.write(str(expand_count) + ", ")
@@ -116,6 +172,11 @@ def print_result(year, month, date):
     sys.stdout.write(str(core_correlation_click_count) + ", ")
     sys.stdout.write(str(exit_click_count) + ", ")
     sys.stdout.write(str(educator_tool_click_count) + ", ")
+    sys.stdout.write(str(mylist_count) + ", ")
+    sys.stdout.write(str(bookcarts_count) + ", ")
+    sys.stdout.write(str(slideshows_count) + ", ")
+    sys.stdout.write(str(timelines_count) + ", ")
+    sys.stdout.write(str(quizzes_count) + ", ")
     sys.stdout.write("%.3f"%((rs_show_count+0.0)/search_count) + ", ")
     sys.stdout.write("%.3f"%((expand_count+0.0)/rs_show_count) + ", ")
     sys.stdout.write("%.3f"%((advance_search_count+0.0)/search_count))
@@ -128,6 +189,11 @@ def print_result(year, month, date):
     core_correlation_click_count = 0
     exit_click_count = 0
     educator_tool_click_count = 0
+    mylist_count = 0
+    bookcarts_count = 0
+    slideshows_count = 0
+    timelines_count = 0
+    quizzes_count = 0
     return
 
 def main():
