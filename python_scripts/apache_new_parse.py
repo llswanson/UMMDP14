@@ -23,12 +23,12 @@ def load_sections(filename):
     return
 
 def load_a_day(file_list):
-    index = 0    
+    index = 0  
+    for x in fields_name:
+        fields_dict[fields_name[index]] = []
+        index += 1  
 
     for file in file_list:
-    	for x in fields_name:
-      	fields_dict[fields_name[index]] = []
-      	index += 1
     	if (os.path.exists(file)):
 	    load_sections(file)
     return
