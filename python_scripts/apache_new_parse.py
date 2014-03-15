@@ -6,8 +6,8 @@ import os
 fields_name = ["client_ip", "timestamp", "http_first_line", "http_status", "response_size",
                              "referrer_url", "user_agent", "time_respond"]
 
-header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ", "Advance_Search_Count ",
-       "R/S, ", "E/R"]
+header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ", "Advance_Search_Count(A), ",
+       "R/S, ", "E/R, ", "A/S"]
 
 expand_count = 0
 rs_show_count = 0
@@ -91,14 +91,13 @@ def print_result(year, month, date):
     sys.stdout.write(str(search_count) + ", ")
     sys.stdout.write(str(advance_search_count) + ", ")
     sys.stdout.write("%.3f"%((rs_show_count+0.0)/search_count) + ", ")
-    sys.stdout.write("%.3f"%((expand_count+0.0)/rs_show_count)
-    print("")
+    sys.stdout.write("%.3f"%((expand_count+0.0)/rs_show_count) + ", ")
+    sys.stdout.write("%.3f"%((advance_search_count+0.0)/search_count))
+    sys.stdout.write("\n")
 
-    '''
-    print year+"-"+month+"-"+date+", "+str(expand_count)+", "+str(rs_show_count)+
-    ", "+str(search_count)+", "+str(advance_search_count)+
-    "%.3f"%((rs_show_count+0.0)/search_count)+", "+"%.3f"%((expand_count+0.0)/rs_show_count)
-    '''
+    
+    #print year+"-"+month+"-"+date+", "+str(expand_count)+", "+str(rs_show_count)+", "+str(search_count)+", "+str(advance_search_count)+"%.3f"%((rs_show_count+0.0)/search_count)+", "+"%.3f"%((expand_count+0.0)/rs_show_count)
+    
     expand_count = 0
     search_count = 0
     rs_show_count = 0
