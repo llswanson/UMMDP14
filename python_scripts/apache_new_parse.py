@@ -196,6 +196,18 @@ def print_result(year, month, date):
     quizzes_count = 0
     return
 
+def is_leap_year(year):
+    if((year % 4) == 0):
+        if((year % 100) == 0):
+            if((year % 400) == 0):
+                return 1
+            else:
+                return 0
+        else:
+         return 1
+    return 0
+
+
 def main():
 
     header_str = ""
@@ -223,10 +235,17 @@ def main():
 	    single_dir_name = dir_prefix + it + "/apache_access/" + year + "/"
 	    directories[year].append(single_dir_name)
 
+    month_list = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
     for year in log_years:
+        if is_leap_year(int(year)) == 1:
+            month_list[1] = 29
+        else:
+            month_list[1] = 28
+
     	for x in range(1,13):
             month = "%02d" %(x)
-            for y in range (1,32):
+            for y in range (1, month_list[int(month)]):
                 date = "%02d" %(y)
 		file_list = []
 		for i in range (0, server_num):
