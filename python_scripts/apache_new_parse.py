@@ -22,6 +22,7 @@ quizzes_count = 0
 def load_sections(filename):
     region_file = open(filename, 'r')
 
+    print filename
     for line in region_file:
         line = line.strip()
         fields = re.split("[\s]+", line)
@@ -253,9 +254,8 @@ def main():
 		for i in range (0, server_num):
 		    file_list.append(directories[year][i] + file_prefix + year[2:] + month + date)
                 
-                if load_a_day(file_list) == 0:
-                    continue
-                print_result(year, month, date)
+                if load_a_day(file_list) == 1:
+                    print_result(year, month, date)
 
     
 

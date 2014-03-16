@@ -27,8 +27,8 @@ def parse_file(filename):
         fields = re.split("[\s]+", line)
         http_first_line = fields[5] + " " + fields[6] + " " + fields[7]
         referrer_url = fields[10]
-		get_expand_time(http_first_line)
-		get_index_time(http_first_line)
+	get_expand_time(http_first_line)
+	get_index_time(http_first_line)
         get_search_time(referrer_url, http_first_line)
         get_advance_search_time(http_first_line)
         get_core_corre_time(http_first_line)
@@ -44,10 +44,16 @@ def parse_file(filename):
     return
 
 def load_a_day(file_list):
+    exist = False
     for filename in file_list:
         if (os.path.exists(filename)):
-			parse_file(filename)
-			print_result(filename[33:35],filename[35:37],filename[37:39])
+		exist = True
+		parse_file(filename)
+		length = len(filename)
+	else:
+		exist = exist or False
+    if (exist):
+    	print_result(filename[length-6:length-4],filename[length-4:length-2],filename[length-2:])
 
 # Count that research topic expanded
 def get_expand_time(url):
@@ -243,11 +249,11 @@ def main():
             month = "%02d" %(x)
             for y in range (1, 32):
                 date = "%02d" %(y)
-				#generate list of file dir for each day(one for each server)
-				file_list = []
-				for i in range (0, server_num):
-					file_list.append(directories[year][i] + file_prefix + year[2:] + month + date)
-					load_a_day(file_list)
-					#print_result(year, month, date)
+		#generate list of file dir for each day(one for each server)
+		file_list = []
+		for i in range (0, server_num):
+			file_list.append(year_servers[year][i] + file_prefix + year[2:] + month + date)
+		load_a_day(file_list)
+		#print_result(year, month, date)
 
 main();
