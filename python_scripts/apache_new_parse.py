@@ -47,7 +47,9 @@ def load_a_day(file_list):
     for file in file_list:
     	if (os.path.exists(file)):
 	    load_sections(file)
-    return
+	else:
+	    return 0
+    return 1
 
 # Count that research topic expanded
 def get_expand_time(url):
@@ -245,13 +247,14 @@ def main():
 
     	for x in range(1,13):
             month = "%02d" %(x)
-            for y in range (1, month_list[int(month)]):
+            for y in range (1, month_list[int(month)-1]+1):
                 date = "%02d" %(y)
 		file_list = []
 		for i in range (0, server_num):
 		    file_list.append(directories[year][i] + file_prefix + year[2:] + month + date)
                 
-                load_a_day(file_list)
+                if load_a_day(file_list) == 0:
+                    continue
                 print_result(year, month, date)
 
     
