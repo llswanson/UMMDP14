@@ -71,13 +71,3 @@ Date, Expand_Button_Click(E), Research_Topic_Show(R), Search_Count(S), Advance_S
 2013-03-11, 1422, 9371, 36591, 2426, 138, 232, 7, 757, 521, 32, 22, 55, 0.256, 0.152, 0.066
 2013-03-12, 1550, 10173, 41523, 2511, 118, 280, 9, 657, 277, 26, 18, 37, 0.245, 0.152, 0.060
 2013-03-13, 1436, 9619, 35938, 2307, 130, 268, 3, 634, 569, 44, 48, 31, 0.268, 0.149, 0.064
-Traceback (most recent call last):
-  File "apache_new_parse.py", line 262, in <module>
-    main();
-  File "apache_new_parse.py", line 256, in main
-    if load_a_day(file_list) == 0:
-  File "apache_new_parse.py", line 49, in load_a_day
-    load_sections(file)
-  File "apache_new_parse.py", line 28, in load_sections
-    http_first_line = fields[5] + " " + fields[6] + " " + fields[7]
-IndexError: list index out of range
