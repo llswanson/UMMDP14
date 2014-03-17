@@ -21,9 +21,11 @@ quizzes_count = 0
 
 def parse_file(filename):
     region_file = open(filename, 'r')
-
+    #i = 0  #test
     for line in region_file:
-        line = line.strip()
+        #sys.stdout.write("line: "+str(i)+'\n')  #test
+        #i += 1  #test
+	line = line.strip()
         fields = re.split("[\s]+", line)
         http_first_line = fields[5] + " " + fields[6] + " " + fields[7]
         referrer_url = fields[10]
@@ -45,8 +47,11 @@ def parse_file(filename):
 
 def load_a_day(file_list):
     exist = False
+    #i = 0
     for filename in file_list:
         if (os.path.exists(filename)):
+		#sys.stdout.write("server: "+str(i)+'\n')  #test
+		#i += 1
 		exist = True
 		parse_file(filename)
 		length = len(filename)
@@ -246,8 +251,10 @@ def main():
 
     for year in log_years:
         for x in range(1,13):
+       # for x in range(3,13):
             month = "%02d" %(x)
-            for y in range (1, 32):
+            for y in range (1,32):
+           # for y in range (13, 32):
                 date = "%02d" %(y)
 		#generate list of file dir for each day(one for each server)
 		file_list = []
