@@ -56,13 +56,13 @@ def load_a_day(file_list):
     #i = 0
     for filename in file_list:
         if (os.path.exists(filename)):
-        #sys.stdout.write("server: "+str(i)+'\n')  #test
-        #i += 1
-        exist = True
-        parse_file(filename)
-        length = len(filename)
-    else:
-        exist = exist or False
+            #sys.stdout.write("server: "+str(i)+'\n')  #test
+            #i += 1
+            exist = True
+            parse_file(filename)
+            length = len(filename)
+        else:
+            exist = exist or False
     if (exist):
         print_result(filename[length-6:length-4],filename[length-4:length-2],filename[length-2:])
 
