@@ -247,7 +247,8 @@ def print_result(year, month, date):
 def main():
 
     header_str = ""
-    for item in header:
+    #for item in header:
+    for item in header2:
         header_str += item
     print header_str
 
