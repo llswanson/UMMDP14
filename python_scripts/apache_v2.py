@@ -6,6 +6,8 @@ import os
 header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Search_Count(S), ", "Advance_Search_Count(A), ",
           "Core_Correalation_Click, ", "Exit_Button_Click, ", "Educator_Tool_Click, ","My_List_Click, ","Bookcarts_Click, ","Slideshows_Click, ","Timelines_Click, ","Quizzes_Click, ", "R/S, ", "E/R, ", "A/S"]
 
+header2 = ["Date, ", "Search from Popular Search, ", "Popular Search from Homepage"]
+
 expand_count = 0
 rs_show_count = 0
 search_count = 0
@@ -19,28 +21,32 @@ slideshows_count = 0
 timelines_count = 0
 quizzes_count = 0
 
+popsearch = 0
+pophomesearch = 0
+
 def parse_file(filename):
     region_file = open(filename, 'r')
     #i = 0  #test
     for line in region_file:
         #sys.stdout.write("line: "+str(i)+'\n')  #test
         #i += 1  #test
-	line = line.strip()
+        line = line.strip()
         fields = re.split("[\s]+", line)
         http_first_line = fields[5] + " " + fields[6] + " " + fields[7]
         referrer_url = fields[10]
-	get_expand_time(http_first_line)
-	get_index_time(http_first_line)
+        '''get_expand_time(http_first_line)
+        get_index_time(http_first_line)
         get_search_time(referrer_url, http_first_line)
         get_advance_search_time(http_first_line)
         get_core_corre_time(http_first_line)
         get_exit_click_time(http_first_line)
         get_educator_tool_click_time(http_first_line)
-    	get_mylist_click(http_first_line)
-    	get_bookcarts_click(http_first_line)
-    	get_slideshows_click(http_first_line)
-    	get_timelines_click(http_first_line)
-    	get_quizzes_click(http_first_line)
+        get_mylist_click(http_first_line)
+        get_bookcarts_click(http_first_line)
+        get_slideshows_click(http_first_line)
+        get_timelines_click(http_first_line)
+        get_quizzes_click(http_first_line)'''
+        get_pop_search(http_first_line, referrer_url)
 
     region_file.close()
     return
@@ -50,15 +56,15 @@ def load_a_day(file_list):
     #i = 0
     for filename in file_list:
         if (os.path.exists(filename)):
-		#sys.stdout.write("server: "+str(i)+'\n')  #test
-		#i += 1
-		exist = True
-		parse_file(filename)
-		length = len(filename)
-	else:
-		exist = exist or False
+        #sys.stdout.write("server: "+str(i)+'\n')  #test
+        #i += 1
+        exist = True
+        parse_file(filename)
+        length = len(filename)
+    else:
+        exist = exist or False
     if (exist):
-    	print_result(filename[length-6:length-4],filename[length-4:length-2],filename[length-2:])
+        print_result(filename[length-6:length-4],filename[length-4:length-2],filename[length-2:])
 
 # Count that research topic expanded
 def get_expand_time(url):
@@ -161,6 +167,17 @@ def get_quizzes_click(url):
         quizzes_count += 1
     return
 
+def get_pop_search(http_first_line, referrer_url):
+    global popsearch
+    global pophomesearch
+    search_url1 = "/do/search?doasearch=true&reissuesearch=true"
+    search_url2 = "/do/search?edition="
+    if http_first_line.find(search_url1) != -1:
+        popsearch += 1
+        if referrer_url.find(search_url2) != -1:
+            pophomesearch += 1
+    return
+
 #print result and clear globals
 def print_result(year, month, date):
     global expand_count
@@ -175,9 +192,11 @@ def print_result(year, month, date):
     global slideshows_count
     global timelines_count
     global quizzes_count
-    
+    global popsearch
+    global pophomesearch
+
     sys.stdout.write(year + "-" + month + "-" + date + ", ")
-    sys.stdout.write(str(expand_count) + ", ")
+    '''sys.stdout.write(str(expand_count) + ", ")
     sys.stdout.write(str(rs_show_count) + ", ")
     sys.stdout.write(str(search_count) + ", ")
     sys.stdout.write(str(advance_search_count) + ", ")
@@ -191,7 +210,9 @@ def print_result(year, month, date):
     sys.stdout.write(str(quizzes_count) + ", ")
     sys.stdout.write("%.3f"%((rs_show_count+0.0)/search_count) + ", ")
     sys.stdout.write("%.3f"%((expand_count+0.0)/rs_show_count) + ", ")
-    sys.stdout.write("%.3f"%((advance_search_count+0.0)/search_count))
+    sys.stdout.write("%.3f"%((advance_search_count+0.0)/search_count))'''
+    sys.stdout.write(str(popsearch)+", ")
+    sys.stdout.write(str(pophomesearch) + ", ")
     sys.stdout.write("\n")
 
     expand_count = 0
@@ -206,6 +227,9 @@ def print_result(year, month, date):
     slideshows_count = 0
     timelines_count = 0
     quizzes_count = 0
+
+    popsearch = 0
+    pophomesearch = 0
     return
 
 '''def is_leap_year(year):
@@ -227,6 +251,7 @@ def main():
         header_str += item
     print header_str
 
+    #format: num_of_servers, server_names, 
     #generate list of servers: 101,102,...
     server_num = int(sys.argv[1])
     server_names = []
@@ -238,29 +263,28 @@ def main():
     for i in range(2, len(sys.argv)):
         log_years.append(sys.argv[i]) #list of str
 
-	#generate dict of folder directory
-	# year -> dir1, dir2,...,dir15
+    #generate dict of folder directory
+    # year -> dir1, dir2,...,dir15
     file_prefix = 'elibrary.bigchalk.com-access_log.'
     dir_prefix = '/home/ec2-user/ummdp/logfiles/'
     year_servers = dict()  
     for year in log_years:
         year_servers[year] = []
         for i in server_names:
-       		temp = dir_prefix + i + "/apache_access/" + year + "/"
-        	year_servers[year].append(temp)
+            temp = dir_prefix + i + "/apache_access/" + year + "/"
+            year_servers[year].append(temp)
 
     for year in log_years:
         for x in range(1,13):
-       # for x in range(3,13):
+        #for x in range(3,13):
             month = "%02d" %(x)
             for y in range (1,32):
-           # for y in range (13, 32):
+            #for y in range (13, 32):
                 date = "%02d" %(y)
-		#generate list of file dir for each day(one for each server)
-		file_list = []
-		for i in range (0, server_num):
-			file_list.append(year_servers[year][i] + file_prefix + year[2:] + month + date)
-		load_a_day(file_list)
-		#print_result(year, month, date)
+                #generate list of file dir for each day(one for each server)
+                file_list = []
+                for i in range (0, server_num):
+                    file_list.append(year_servers[year][i] + file_prefix + year[2:] + month + date)
+                load_a_day(file_list)
 
 main();
