@@ -36,10 +36,6 @@ def load_sections(filename):
   region_file.close()
   return
 
-def print_field7(my_dict):
-    for field in fields_name["query"]:
-        print field
-    return 
 
 # list dictionary in list mode
 def print_dict_list_mode(my_dict):
@@ -149,9 +145,7 @@ def load_a_day(filename1,filename2,filename3):
 
 
 def print_result(year, month, date):
-    #print year+"-"+month+"-"+date+", "+str(get_search_times(fields_dict))+", "+str(get_research_topic_click(fields_dict))
-    sys.stdout.write(year+"-"+month+"-"+date+", ")
-    print_field7(my_dict);
+    print year+"-"+month+"-"+date+", "+str(get_search_times(fields_dict))+", "+str(get_research_topic_click(fields_dict))
     return
     
 
@@ -170,13 +164,11 @@ def main():
   
     file13 = 'elibdmz-elibweb_usage.log.2013-'
     file14 = 'elibdmz-elibweb_usage.log.2014-'
-    #for x in range(1,13):
-    for x in range(1,2):
+    for x in range(1,13):
         month = "%02d" %(x)
-        #for y in range (1,32):
-        for y in range(1,2):
+        for y in range (1,32):
                 date = "%02d" %(y)
-
+                
                 file1 = dir1+file13+month+"-"+date
                 file2 = dir2+file13+month+"-"+date
                 file3 = dir3+file13+month+"-"+date
@@ -185,7 +177,7 @@ def main():
                         load_a_day(file1,file2,file3)
                         print_result('13',month,date)
 
-    '''for x in range(1,13):
+    for x in range(1,13):
         month = "%02d" %(x)
         for y in range (1,32):
                 date = "%02d" %(y)
@@ -196,7 +188,7 @@ def main():
                 
                 if (os.path.exists(file1) and os.path.exists(file2) and os.path.exists(file3)):
                         load_a_day(file1,file2,file3)
-                        print_result('14',month,date)'''
+                        print_result('14',month,date)
     return
 
 main();
