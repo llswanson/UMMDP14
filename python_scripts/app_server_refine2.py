@@ -37,7 +37,7 @@ def load_sections(filename):
   return
 
 def print_field7(my_dict):
-    for field in fields_name["query"]:
+    for field in fields_dict["query"]:
         print field
     return 
 
@@ -151,7 +151,7 @@ def load_a_day(filename1,filename2,filename3):
 def print_result(year, month, date):
     #print year+"-"+month+"-"+date+", "+str(get_search_times(fields_dict))+", "+str(get_research_topic_click(fields_dict))
     sys.stdout.write(year+"-"+month+"-"+date+", ")
-    print_field7(my_dict);
+    print_field7(fields_dict);
     return
     
 
