@@ -10,11 +10,14 @@ Both these files now could access all logfiles and generate output
 without using any other shell scripts. But you still need to redirect
 the output to a directory you would like to store the output.
 
-Updated: We merge and migrate our python scripts to apache_ratio_parse.py
+Updated: We merge and migrate our python scripts to apache.py
 
 E.g.
 Step to run the script for apache logs
 
 cd /home/ec2-user/UMMDP14/python_scripts
-python apache_ratio_parse.py > output/apache_full.out
+The first command line input parameter is the server size, and the following are the year you would like the script to run against
+
+E.g 
+python apache_ratio_parse.py 15 2013 2014> output/apache_full.out
 
