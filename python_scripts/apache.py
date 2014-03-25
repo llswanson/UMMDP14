@@ -8,6 +8,8 @@ header = ["Date, ", "Expand_Button_Click(E), ", "Research_Topic_Show(R), ", "Sea
 
 header2 = ["Date, ", "Search from Popular Search, ", "Popular Search from Homepage"]
 
+header3 = ["Data, ", "Search from Specific Time Period, ", "Tag Search"]
+
 expand_count = 0
 rs_show_count = 0
 search_count = 0
@@ -24,6 +26,8 @@ quizzes_count = 0
 popsearch = 0
 pophomesearch = 0
 
+searchSTP = 0
+tagsearch = 0
 def parse_file(filename):
     region_file = open(filename, 'r')
     #i = 0  #test
@@ -45,8 +49,10 @@ def parse_file(filename):
         get_bookcarts_click(http_first_line)
         get_slideshows_click(http_first_line)
         get_timelines_click(http_first_line)
-        get_quizzes_click(http_first_line)'''
-        get_pop_search(http_first_line, referrer_url)
+        get_quizzes_click(http_first_line)
+        get_pop_search(http_first_line, referrer_url)'''
+        get_search_STP(http_first_line)
+        get_tag_search(http_first_line)
 
     region_file.close()
     return
@@ -178,6 +184,20 @@ def get_pop_search(http_first_line, referrer_url):
             pophomesearch += 1
     return
 
+def get_search_STP(http_first_line):
+    global searchSTP
+    search_url = "datetype=between"
+    if http_first_line.find(search_url) != -1:
+        searchSTP += 1
+    return
+
+def get_tag_search(http_first_line):
+    global tagsearch
+    search_url = "&secondaryNav=tag"
+    if http_first_line.find(search_url) != -1:
+        tagsearch += 1
+    return
+
 #print result and clear globals
 def print_result(year, month, date):
     global expand_count
@@ -194,6 +214,9 @@ def print_result(year, month, date):
     global quizzes_count
     global popsearch
     global pophomesearch
+    global searchSTP
+    global tagsearch
+
 
     sys.stdout.write(year + "-" + month + "-" + date + ", ")
     '''sys.stdout.write(str(expand_count) + ", ")
@@ -210,9 +233,11 @@ def print_result(year, month, date):
     sys.stdout.write(str(quizzes_count) + ", ")
     sys.stdout.write("%.3f"%((rs_show_count+0.0)/search_count) + ", ")
     sys.stdout.write("%.3f"%((expand_count+0.0)/rs_show_count) + ", ")
-    sys.stdout.write("%.3f"%((advance_search_count+0.0)/search_count))'''
+    sys.stdout.write("%.3f"%((advance_search_count+0.0)/search_count+", "))
     sys.stdout.write(str(popsearch)+", ")
-    sys.stdout.write(str(pophomesearch) + ", ")
+    sys.stdout.write(str(pophomesearch)+", ")'''
+    sys.stdout.write(str(searchSTP)+", ")
+    sys.stdout.write(str(tagsearch))
     sys.stdout.write("\n")
 
     expand_count = 0
@@ -230,6 +255,10 @@ def print_result(year, month, date):
 
     popsearch = 0
     pophomesearch = 0
+
+    searchSTP = 0
+    tagsearch = 0
+
     return
 
 '''def is_leap_year(year):
@@ -248,7 +277,8 @@ def main():
 
     header_str = ""
     #for item in header:
-    for item in header2:
+    #for item in header2:
+    for item in header3: 
         header_str += item
     print header_str
 
