@@ -1,0 +1,50 @@
+search from homepage: post to do/search
+
+doASearch=true
+set=search
+resource1=on
+resource2=on
+secondaryNav=
+searchtype=natural
+datetype=all
+edition=
+sourcetype10=checked  %% only 
+form=search   %% only
+keyword=football
+submitButton.x=18 %% different
+submitButton.y=7  %% different
+sourcetype1=checked
+sourcetype2=checked
+sourcetype3=checked
+sourcetype4=checked
+sourcetype9=checked
+sourcetype5=checked
+sourcetype8=checked
+sourcetype7=checked
+sourcetype6=checked
+
+search from result page: post to do/search
+
+doASearch=true
+set=search
+resource1=on
+resource2=on
+secondaryNav=
+searchtype=natural
+datetype=all
+edition=
+keyword=football
+searchsource=results   %%different
+submitButton.x=33
+submitButton.y=19
+sourcetype1=checked
+sourcetype2=checked
+sourcetype3=checked
+sourcetype4=checked
+sourcetype5=checked
+sourcetype6=checked
+sourcetype7=checked
+sourcetype9=checked
+
+==> a new field called searchsource is added to the post request
+==> this will be logged in "query" field in logfile ?
