@@ -14,6 +14,7 @@ header = ["Date, ", "Search Count, ", "Research Topic Click"]
 
 file_size = 0
 session_dict = dict()
+session_table = dict()
 
 def load_sections(filename):
   region_file = open(filename, 'rU')
@@ -35,12 +36,6 @@ def load_sections(filename):
 
   region_file.close()
   return
-
-
-def print_field7(my_dict):
-  for field in session_dict["query"]:
-    print field
-  return 
 
 
 def get_total_search_counts(my_dict):
@@ -160,39 +155,25 @@ def get_session_num(my_dict):
   return len(get_session_retrieval_counts(my_dict))
 
 
-def load_a_day(file_list):
-  exist = False
-  #i = 0
-  for filename in file_list:
-    if (os.path.exists(filename)):
-      #sys.stdout.write("server: "+str(i)+'\n')  #test
-      #i += 1
-      exist = True
-      load_sections(filename)
-      length = len(filename)
-    else:
-      exist = exist or False
-  if (exist):
-    print_result(filename[length-6:length-4],filename[length-4:length-2],filename[length-2:])
-
-
 def load(file):
+  session_table = dict()
   load_sections(file)
-  print "research topic click: " + str(get_research_topic_click(session_dict))
-  print "total search: " + str(get_total_search_counts(session_dict))
-  #
-  #print get_session_retrieval_counts(session_dict)
-  print "total retrieve: " + str(get_total_retrieval_counts(session_dict))
-  print "total preview: " + str(get_total_preview_counts(session_dict))
-  print "session amount: " + str(len(get_session_retrieval_counts(session_dict)))
-  print "mean ratio preview / retrieval: " + str(get_mean_ratio_preview_over_retrieval(session_dict))
-  return
+  session_retrieval_table = get_session_retrieval_counts(session_dict)
+  session_preview_table = get_session_preview_counts(session_dict)
+  session_search_table = get_session_search_counts(session_dict)
 
-def print_result(year, month, date):
-    sys.stdout.write(year+"-"+month+"-"+date+", ")
-    print_field7(dict);
-    return
-    
+  for session in session_search_table:
+    session_table[session] = dict()
+    session_table[session]["search"] = session_search_table[session]
+
+  for session in session_preview_table:
+    session_table[session]["preview"] = session_preview_table[session]
+
+  for session in session_retrieval_table:
+    session_table[session]["retrieval"] = session_preview_table[session]
+
+  return session_table
+
 
 def main():
     '''
