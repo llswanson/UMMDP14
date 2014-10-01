@@ -10,8 +10,6 @@ fields_name = ["timestamps", "program_name", "product_SKU", "request_type", "req
                "delivery_format", "document_source", "dumy1", "content_type", "authentication_method", "language", "interface_type", "dumy2",
                "subscription_id", "usage_type", "user_agent"]
 
-header = ["Date, ", "Search Count, ", "Research Topic Click"]
-
 file_size = 0
 session_dict = dict()
 session_table = dict()
@@ -174,58 +172,47 @@ def load(file):
 
   return session_table
 
+def combine_session_table(session_table_main, session_table_to_add):
+    for key, value in session_table_to_add
+        session_table_main[key] = value
 
 def main():
-    '''
-    header_str = ""
-    #for item in header:
-    #for item in header2:
-    for item in header3:
-        header_str += item
-    print header_str
+    file_list_prefix = "/home/ec2-user/UMMDP14/2014_d/app_server" 
+    app_server= dict()
+    dates = set()
+    for i in range(101, 115):
+        file_list_name = file_list_prefix + i
+        app_server[i] = dict()
+        app_server[i]['file_list'] = open(file_list_name, 'rU')
+        app_server[i]['files'] = dict()
+        for filename in app_server[i]['file_list']:
+            date = filename.split(".")[2]
+            dates.add(date)
+            app_server[i]['files'][date] = filename
+        app_server[i]['file_list'].close()
+            
+    ordered_date = list(dates)
+    ordered_date.sort()
 
-    print 
-
-    #format: num_of_servers, server_names, 
-    #generate list of servers: 101,102,...
-    server_num = int(sys.argv[1])
-    server_names = []
-    for i in range (0, server_num):
-        my_server = 101 + i
-        server_names.append(str(my_server)) #list of str
-
-    log_years = []
-    for i in range(2, len(sys.argv)):
-        log_years.append(sys.argv[i]) #list of str
-
-    #generate dict of folder directory
-    # year -> dir1, dir2,...,dir15
-    file_prefix = 'elibrary.bigchalk.com-access_log.'
-    dir_prefix = '/home/ec2-user/ummdp/logfiles/'
-    year_servers = dict()  
-    for year in log_years:
-        year_servers[year] = []
-        for i in server_names:
-            temp = dir_prefix + i + "/apache_access/" + year + "/"
-            year_servers[year].append(temp)
-
-    for year in log_years:
-        #for x in range(1,13):
-        for x in range(1,2):
-            month = "%02d" %(x)
-            #for y in range (1,32):
-            for y in range (1, 2):
-                date = "%02d" %(y)
-                #generate list of file dir for each day(one for each server)
-                file_list = []
-                for i in range (0, server_num):
-                    file_list.append(year_servers[year][i] + file_prefix + year[2:] + month + date)
-                load_a_day(file_list)
-    '''
-
-    file_path = '/Users/hongbo/Desktop/elibdmz-elibweb_usage.log.2013-12-03'
-    if (os.path.exists(file_path)):
-      load(file_path)
+    write_file_prefix = '/home/ec2-user/UMMDP14/app_server_parsed/'
+    comma = ','
+    newline = '\n'
+    for date in ordered_date:
+        # get session table for a day
+        session_table_on_date = dict()
+        for i in range(101, 115):
+            path = app_server[i]['files'][date]
+            if (os.path.exists(path)):
+                session_table_for_server_i = load(path) 
+            combine_session_table(session_table_on_date, session_table_for_server_i)
+        # write session table to a file
+        write_filename = write_file_prefix + date
+        output_file = open(write_filename, 'r+')
+        output_file.write("session_id,date,search,retrieval,preview,")
+        for key, value in session_table_on_date:
+            output_file.write(key + comma + date + comma + value['search'] + comma + value['retrieval'] + comma + value['preview'] + comma + newline)
+        output_file.close()
+return
 
 main();
 
