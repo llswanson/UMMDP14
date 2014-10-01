@@ -22,7 +22,10 @@ def load_sections(filename):
   for line in region_file:
     index = 0
     fields = line.split(";;|")
-    session_id = fields[20]
+    if (len(fields) >= 20):
+        session_id = fields[20]
+    else: 
+        print "Error @ " + filename + line
     if session_id not in session_dict:
       session_dict[session_id] = dict()
 
