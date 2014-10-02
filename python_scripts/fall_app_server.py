@@ -39,15 +39,6 @@ def load_sections(filename):
   region_file.close()
   return
 
-
-def get_total_search_counts(my_dict):
-  session_search_counts = get_session_search_counts(my_dict)
-  count = 0
-  for session_id in session_search_counts:
-    count += session_search_counts[session_id]       
-  return count
-
-
 def get_session_search_counts(my_dict):
   count = 0
   session_search_counts = {}
@@ -57,11 +48,9 @@ def get_session_search_counts(my_dict):
 
     urls = my_dict[session_id]["request_url"]
     types = my_dict[session_id]["request_type"]
-    #for url in urls:
     for i in range (0,len(urls)):
       search_url1 = "/do/search"
-      search_url2 = "POST"
-      if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1:
+      if urls[i].find(search_url1) != -1:
         session_search_counts[session_id] += 1
 
   return session_search_counts
@@ -80,11 +69,6 @@ def get_session_retrieval_counts(my_dict):
     for i in range (0,len(urls)):
       search_url1 = "/do/document"
       search_url2 = "SEARCH_DOC_RETRIEVAL;;Document"
-
-      '''
-      if types[i].find("SEARCH_DOC_RETRIEVAL;;") != -1 and types[i].find("SEARCH_DOC_RETRIEVAL;;Document") == -1:
-        print types[i]
-      '''
 
       if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1:
         session_retrieval_counts[session_id] += 1
@@ -109,6 +93,13 @@ def get_session_preview_counts(my_dict):
 
   return session_preview_counts
 
+'''
+def get_total_search_counts(my_dict):
+  session_search_counts = get_session_search_counts(my_dict)
+  count = 0
+  for session_id in session_search_counts:
+    count += session_search_counts[session_id]       
+  return count
 
 def get_total_preview_counts(my_dict):
   session_preview_counts = get_session_preview_counts(my_dict)
@@ -117,14 +108,12 @@ def get_total_preview_counts(my_dict):
     count += session_preview_counts[session_id]
   return count 
 
-
 def get_total_retrieval_counts(my_dict):
   session_retrieval_counts = get_session_retrieval_counts(my_dict)
   count = 0
   for session_id in session_retrieval_counts:
     count += session_retrieval_counts[session_id]
   return count 
-
 
 def get_research_topic_click(my_dict):
   count = 0
@@ -151,10 +140,9 @@ def get_mean_ratio_preview_over_retrieval(my_dict):
   mean /= retrieval_count
   return mean
 
-
 def get_session_num(my_dict):
   return len(get_session_retrieval_counts(my_dict))
-
+'''
 
 def load(file):
   session_table = dict()
@@ -172,18 +160,13 @@ def load(file):
     session_table[session]["preview"] = session_preview_table[session]
 
   for session in session_retrieval_table:
-    session_table[session]["retrieval"] = session_preview_table[session]
+    session_table[session]["retrieval"] = session_retrieval_table[session]
 
   session_search_table.clear()
   session_retrieval_table.clear()
   session_preview_table.clear()
 
   return session_table
-
-def combine_session_table(session_table_main, session_table_to_add):
-    for key, value in session_table_to_add.iteritems():
-        session_table_main[key] = value
-    session_table_to_add.clear()
 
 def main():
     file_list_prefix = "/home/ec2-user/UMMDP14/2014_d/app_server" 
@@ -225,6 +208,24 @@ def main():
     
     return
 
-main();
+def test():
+    test_file = '/home/ec2-user/ummdp/logfiles/101/app/2013/elibdmz-elibweb_usage.log.2013-01-01'
+    # check the output of session_dict, confirmed that all urls are packed in a list 
+    # needs to iterate through the list to get precise search count 
+    # similarly for retrieval and preview
 
+    load_sections(test_file)
+    print session_dict
+
+    # check the output for all zero sessions 
+    # confirmed that GET request is also used for /do/search
+    # should eliminate POST checker for get search count
+    output = load(test_file)
+    for key,value in output.iteritems():
+        if (value['search'] == 0 and value['retrieval'] == 0 and value['preview'] == 0):
+            print session_dict                
+    return
+
+main();
+#test();
 
