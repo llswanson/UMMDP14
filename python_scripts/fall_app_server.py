@@ -47,10 +47,12 @@ def get_session_search_counts(my_dict):
       session_search_counts[session_id] = 0
 
     urls = my_dict[session_id]["request_url"]
-    types = my_dict[session_id]["request_type"]
+    types = my_dict[session_id]["request_service"]
+    search_url1 = "/do/search"
+    search_url2 = "SEARCH_SEARCH"
+      
     for i in range (0,len(urls)):
-      search_url1 = "/do/search"
-      if urls[i].find(search_url1) != -1:
+      if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1:
         session_search_counts[session_id] += 1
 
   return session_search_counts
@@ -59,39 +61,51 @@ def get_session_search_counts(my_dict):
 def get_session_retrieval_counts(my_dict):
   count = 0
   session_retrieval_counts = {}
+  session_retrieval_from_search = {}
   for session_id in my_dict:
     if session_id not in session_retrieval_counts:
       session_retrieval_counts[session_id] = 0
+      session_retrieval_from_search[session_id] = 0
 
     urls = my_dict[session_id]["request_url"]
     types = my_dict[session_id]["request_service"]
-    #for url in urls:
+    queries = my_dict[session_id]["query"]
+    search_url1 = "/do/document"
+    search_url2 = "SEARCH_DOC_RETRIEVAL;;Document"
+    search_url3 = "set=search"
+    
     for i in range (0,len(urls)):
-      search_url1 = "/do/document"
-      search_url2 = "SEARCH_DOC_RETRIEVAL;;Document"
 
       if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1:
         session_retrieval_counts[session_id] += 1
+        if queries[i].find(search_url3) != -1:
+            session_retrieval_from_search[session_id] += 1
 
-  return session_retrieval_counts
-
+  return session_retrieval_counts, session_retrieval_from_search
 
 def get_session_preview_counts(my_dict):
   count = 0
   session_preview_counts = {}
+  session_preview_from_search = {}
   for session_id in my_dict:
     if session_id not in session_preview_counts:
       session_preview_counts[session_id] = 0
+      session_preview_from_search[session_id] = 0
 
     urls = my_dict[session_id]["request_url"]
     types = my_dict[session_id]["request_service"]
+    queries = my_dict[session_id]["query"]
+    search_url1 = "/do/document"
+    search_url2 = "SEARCH_DOC_RETRIEVAL;;DocumentPreview"
+    search_url3 = "set=search"
+
     for i in range (0,len(urls)):
-      search_url1 = "/do/document"
-      search_url2 = "SEARCH_DOC_RETRIEVAL;;DocumentPreview"
       if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1:
         session_preview_counts[session_id] += 1
+        if queries[i].find(search_url3) != -1:
+            session_preview_from_search[session_id] += 1
 
-  return session_preview_counts
+  return session_preview_counts, session_preview_from_search
 
 '''
 def get_total_search_counts(my_dict):
@@ -127,7 +141,7 @@ def get_research_topic_click(my_dict):
         continue
   return count
 
-def get_mean_ratio_preview_over_retrieval(my_dict):
+def get_mean_rs_ratio_preview_over_retrieval(my_dict):
   mean = 0
   preview = get_session_preview_counts(my_dict)
   retrieval = get_session_retrieval_counts(my_dict)
@@ -147,8 +161,8 @@ def get_session_num(my_dict):
 def load(file):
   session_table = dict()
   load_sections(file)
-  session_retrieval_table = get_session_retrieval_counts(session_dict)
-  session_preview_table = get_session_preview_counts(session_dict)
+  session_retrieval_table, session_retrieval_from_search = get_session_retrieval_counts(session_dict)
+  session_preview_table, session_preview_from_search = get_session_preview_counts(session_dict)
   session_search_table = get_session_search_counts(session_dict)
   session_dict.clear()
     
@@ -159,12 +173,20 @@ def load(file):
   for session in session_preview_table:
     session_table[session]["preview"] = session_preview_table[session]
 
+  for session in session_preview_from_search:
+    session_table[session]["preview_from_search"] = session_preview_from_search[session]
+
   for session in session_retrieval_table:
     session_table[session]["retrieval"] = session_retrieval_table[session]
+
+  for session in session_retrieval_from_search:
+    session_table[session]["retrieval_from_search"] = session_retrieval_from_search[session]
 
   session_search_table.clear()
   session_retrieval_table.clear()
   session_preview_table.clear()
+  session_retrieval_from_search.clear()
+  session_preview_from_search.clear()
 
   return session_table
 
@@ -172,7 +194,7 @@ def main():
     file_list_prefix = "/home/ec2-user/UMMDP14/2014_d/app_server" 
     app_server= dict()
     dates = set()
-    for i in range(101, 116):
+    for i in range(101, 102):
         file_list_name = file_list_prefix + str(i)
         app_server[i] = dict()
         app_server[i]['file_list'] = open(file_list_name, 'rU')
@@ -194,15 +216,25 @@ def main():
         # write session table to a file
         write_filename = write_file_prefix + date
         output_file = open(write_filename, 'w+')
-        output_file.write("session_id,date,search,retrieval,preview," + newline)
+        output_file.write("session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search, rs_ratio," + newline)
 
         # get session table for a day
-        for i in range(101, 116):
+        for i in range(101, 102):
             path = app_server[i]['files'][date]
             if (os.path.exists(path)):
                 session_table_for_server_i = load(path) 
             for key, value in session_table_for_server_i.iteritems():
-                output_file.write(key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['preview']) + comma + newline)
+                rs_ratio = 0  # rs_ratio of retrieval / search
+                if value['search'] == 0:
+                    rs_ratio = -1
+                else:
+                    total_retrieval = value['retrieval'] + value['preview']
+                    total_retrieval_from_search =  value['retrieval_from_search'] + value['preview_from_search']
+                    if (total_retrieval != total_retrieval_from_search):
+                        rs_ratio = -1 * (total_retrieval_from_search / (value['search'] * 1.0))
+                    else:
+                        rs_ratio = total_retrieval_from_search / (value['search'] * 1.0) 
+                output_file.write(key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + newline)
             session_table_for_server_i.clear()
         output_file.close()
     
