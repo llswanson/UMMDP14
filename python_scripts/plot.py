@@ -81,14 +81,15 @@ def plot_line_chart_sum(search_sum, retrieval_sum, preview_sum, monthes):
 	
 	line_chart = pygal.Line()
 	stackedline_chart = pygal.StackedLine(fill=True)
-	line_chart.title = 'Proquest Search Usability Test from 2013' 
+	line_chart.title = 'Proquest Search Usability Test 13 through 14' 
 	line_chart.x_labels = monthes
 	line_chart.add('Search/Session', search_sum)
 	line_chart.add('Retrival/Session', retrieval_sum)
 	line_chart.add('Preview/Session', preview_sum)
 	#line_chart.add('Session amonut', session_count_per_day)
 
-	line_chart.render_to_file('/Users/hongbo/Desktop/visualization/bar_chart_total.svg')
+	print a
+	line_chart.render_to_file('/Users/hongbo/Desktop/visualization/bar_chart_sum.svg')
 
 
 def main():
