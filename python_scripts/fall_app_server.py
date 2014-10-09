@@ -228,12 +228,8 @@ def main():
                 if value['search'] == 0:
                     rs_ratio = -1
                 else:
-                    total_retrieval = value['retrieval'] + value['preview']
                     total_retrieval_from_search =  value['retrieval_from_search'] + value['preview_from_search']
-                    if (total_retrieval != total_retrieval_from_search):
-                        rs_ratio = -1 * (total_retrieval_from_search / (value['search'] * 1.0))
-                    else:
-                        rs_ratio = total_retrieval_from_search / (value['search'] * 1.0) 
+                    rs_ratio = total_retrieval_from_search / (value['search'] * 1.0) 
                 output_file.write(key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + newline)
             session_table_for_server_i.clear()
         output_file.close()

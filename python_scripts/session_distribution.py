@@ -46,7 +46,7 @@ def load_counts_per_session():
                     session_dist_preview[preview_count] += 1
 
                 if rs_ratio < 0:
-                    rs_ratio_dict[-1] += 1
+                    continue
                 elif (int(rs_ratio) > 20):
                     rs_ratio_dict[20] += 1
                 else:
