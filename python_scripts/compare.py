@@ -24,8 +24,7 @@ def load_sections(filename):
     fields = line.split(";;|")
     if (len(fields) >= 20):
         session_id = fields[20]
-    else: 
-        print "Error @ " + filename + line
+    
     if session_id not in session_dict:
       session_dict[session_id] = dict()
 
@@ -50,10 +49,12 @@ def get_session_search_counts(my_dict):
     types = my_dict[session_id]["request_service"]
     search_url1 = "/do/search"
     search_url2 = "SEARCH_SEARCH"
-      
+    
+    #print len(urls)  
     for i in range (0,len(urls)):
-      if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1:
-        session_search_counts[session_id] += 1
+      if urls[i].find(search_url1) != -1:
+        if i < len(types) and types[i].find(search_url2) != -1:
+            session_search_counts[session_id] += 1
 
   return session_search_counts
 
@@ -75,7 +76,6 @@ def get_session_retrieval_counts(my_dict):
     search_url3 = "set=search"
     
     for i in range (0,len(urls)):
-
       if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1:
         session_retrieval_counts[session_id] += 1
         if queries[i].find(search_url3) != -1:
@@ -167,37 +167,24 @@ def load(file):
   session_retrieval_table, session_retrieval_from_search = get_session_retrieval_counts(session_dict)
   session_preview_table, session_preview_from_search = get_session_preview_counts(session_dict)
   session_search_table = get_session_search_counts(session_dict)
+  search_count = get_total_search_counts(session_dict)
+  research_topic_click = get_research_topic_click(session_dict)
   session_dict.clear()
-    
-  for session in session_search_table:
-    session_table[session] = dict()
-    session_table[session]["search"] = session_search_table[session]
-
-  for session in session_preview_table:
-    session_table[session]["preview"] = session_preview_table[session]
-
-  for session in session_preview_from_search:
-    session_table[session]["preview_from_search"] = session_preview_from_search[session]
-
-  for session in session_retrieval_table:
-    session_table[session]["retrieval"] = session_retrieval_table[session]
-
-  for session in session_retrieval_from_search:
-    session_table[session]["retrieval_from_search"] = session_retrieval_from_search[session]
-
+  #print "search count " + str(search_count) + ",  r-click " + str(research_topic_click)
   session_search_table.clear()
   session_retrieval_table.clear()
   session_preview_table.clear()
   session_retrieval_from_search.clear()
   session_preview_from_search.clear()
+  session_table.clear()
 
-  return session_table
+  return {"search_count": search_count, "r_click": research_topic_click} 
 
 def main():
     file_list_prefix = "/home/ec2-user/UMMDP14/2014_d/app_server" 
     app_server= dict()
     dates = set()
-    for i in range(101, 102):
+    for i in range(101, 116):
         file_list_name = file_list_prefix + str(i)
         app_server[i] = dict()
         app_server[i]['file_list'] = open(file_list_name, 'rU')
@@ -212,33 +199,64 @@ def main():
     ordered_date = list(dates)
     ordered_date.sort()
 
+    
+
+    filtered_date_1308 = get_dates(ordered_date, "2013", "08")
+    filtered_date_1408 = get_dates(ordered_date, "2014", "08")
+    filtered_date_1309 = get_dates(ordered_date, "2013", "09")
+    filtered_date_1409 = get_dates(ordered_date, "2014", "09")
+
+    date_lists = {"1308": filtered_date_1308, "1309": filtered_date_1309, "1408": filtered_date_1408, "1409": filtered_date_1409}
+
     write_file_prefix = '/home/ec2-user/UMMDP14/compare/'
     comma = ','
     newline = '\n'
-    for date in ordered_date:
-        # write session table to a file
-        write_filename = write_file_prefix + date
-        output_file = open(write_filename, 'w+')
-        output_file.write("session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search, rs_ratio," + newline)
-
-        # get session table for a day
-        for i in range(101, 102):
-            path = app_server[i]['files'][date]
-            if (os.path.exists(path)):
-                session_table_for_server_i = load(path) 
-            for key, value in session_table_for_server_i.iteritems():
-                rs_ratio = 0  # rs_ratio of retrieval / search
-                if value['search'] == 0:
-                    rs_ratio = -1
-                else:
-                    total_retrieval_from_search =  value['retrieval_from_search'] + value['preview_from_search']
-                    rs_ratio = total_retrieval_from_search / (value['search'] * 1.0) 
-                output_file.write(key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + newline)
-            session_table_for_server_i.clear()
-        output_file.close()
     
+    search_counts = 0
+    r_click_counts = 0
+
+
+    for key, date_list in date_lists.iteritems():
+    
+        for date in date_list:
+            # get session table for a day
+            for i in range(101, 116):
+                if date in app_server[i]['files']:
+                    path = app_server[i]['files'][date]
+                    if (os.path.exists(path)):
+                        #print path
+                        res = load(path)
+                        search_counts += res["search_count"]
+                        r_click_counts += res["r_click"]
+                else:
+                    continue
+            
+        write_filename = write_file_prefix + key
+        output_file = open(write_filename, 'w+')
+        output_file.write("" + newline)
+
+        output_file.write("search count: " + str(search_counts) + newline)
+        output_file.write("research_topic click: " + str(r_click_counts) + newline)
+        print key + " search: " + str(search_counts) + ", " + str(r_click_counts)
+
+        output_file.close()
+
     return
 
+
+def get_dates(date_list, year, month):
+    filtered_set = set()
+    filtered_list = list()
+    for date in date_list:
+        date_fields = date.split("-")
+        if (date_fields[0] == year and date_fields[1] == month):
+            filtered_list.append(date)
+
+    filtered_set = list(filtered_list)
+    filtered_set.sort()    
+    return filtered_set 
+
+'''
 def test():
     test_file = '/home/ec2-user/ummdp/logfiles/101/app/2013/elibdmz-elibweb_usage.log.2013-01-01'
     # check the output of session_dict, confirmed that all urls are packed in a list 
@@ -256,7 +274,7 @@ def test():
         if (value['search'] == 0 and value['retrieval'] == 0 and value['preview'] == 0):
             print session_dict                
     return
-
+'''
 main();
 #test();
 
