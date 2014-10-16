@@ -132,8 +132,8 @@ def get_session_email_counts(my_dict):
     count = 0
     session_email_counts = {}
     for session_id in my_dict:
-        if session_id not in session_addtomylist_counts:
-           session_addtomylist_counts[session_id] = 0
+        if session_id not in session_email_counts:
+           session_email_counts[session_id] = 0
         urls = my_dict[session_id]["request_url"]
         queries = my_dict[session_id]['query']
         search_url1 = '/do/email'
@@ -149,8 +149,8 @@ def get_session_print_counts(my_dict):
     count = 0
     session_print_counts = {}
     for session_id in my_dict:
-        if session_id not in session_addtomylist_counts:
-           session_addtomylist_counts[session_id] = 0
+        if session_id not in session_print_counts:
+           session_print_counts[session_id] = 0
         urls = my_dict[session_id]["request_url"]
         queries = my_dict[session_id]['query']
         search_url1 = '/do/document'
@@ -214,7 +214,7 @@ def main():
     file_list_prefix = "/home/ec2-user/UMMDP14/2014_d/app_server" 
     app_server= dict()
     dates = set()
-    for i in range(101, 102):
+    for i in range(101, 116):
         file_list_name = file_list_prefix + str(i)
         app_server[i] = dict()
         app_server[i]['file_list'] = open(file_list_name, 'rU')
@@ -240,7 +240,7 @@ def main():
         output_file.write(header_str + newline)
 
         # get session table for a day
-        for i in range(101, 102):
+        for i in range(101, 116):
             path = app_server[i]['files'][date]
             if (os.path.exists(path)):
                 session_table_for_server_i = load(path) 
@@ -252,6 +252,11 @@ def main():
                     total_retrieval_from_search =  value['retrieval_from_search'] + value['preview_from_search']
                     rs_ratio = total_retrieval_from_search / (value['search'] * 1.0) 
                 output_file.write(key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + str(value['addtomylist']) + comma + str(value['email']) + comma + str(value['print']) + comma + newline)
+           
+                 # for collection purpose
+                if (value['addtomylist'] != 0 or value['email'] != 0 or value['print'] != 0):
+                    print 'Find satisfaction point @ ' + key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['r    etrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + str(val    ue['addtomylist']) + comma + str(value['email']) + comma + str(value['print']) + comma + newline
+            
             session_table_for_server_i.clear()
         output_file.close()
     
