@@ -255,7 +255,7 @@ def main():
            
                  # for collection purpose
                 if (value['addtomylist'] != 0 or value['email'] != 0 or value['print'] != 0):
-                    print 'Find satisfaction point @ ' + key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['r    etrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + str(val    ue['addtomylist']) + comma + str(value['email']) + comma + str(value['print']) + comma + newline
+                    print 'Find satisfaction point @ ' + key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + str(value['addtomylist']) + comma + str(value['email']) + comma + str(value['print']) + comma + newline
             
             session_table_for_server_i.clear()
         output_file.close()
