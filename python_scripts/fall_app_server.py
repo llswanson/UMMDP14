@@ -107,63 +107,71 @@ def get_session_preview_counts(my_dict):
 
   return session_preview_counts, session_preview_from_search
 
-'''
-def get_total_search_counts(my_dict):
-  session_search_counts = get_session_search_counts(my_dict)
-  count = 0
-  for session_id in session_search_counts:
-    count += session_search_counts[session_id]       
-  return count
+def get_session_addtomylist_counts(my_dict):
+    # count all the files that are added to mylist
+    # without specifying if is a regular doc or research topic
+    count = 0
+    session_addtomylist_counts = {}
+    for session_id in my_dict:
+        if session_id not in session_addtomylist_counts:
+           session_addtomylist_counts[session_id] = 0
+        urls = my_dict[session_id]["request_url"]
+        types = my_dict[session_id]["request_service"]
+        queries = my_dict[session_id]['query']
+        search_url1 = '/do/mylist'
+        search_url2 = 'MyListComponent'
+        search_url3 = 'mylist=add'
 
-def get_total_preview_counts(my_dict):
-  session_preview_counts = get_session_preview_counts(my_dict)
-  count = 0
-  for session_id in session_preview_counts:
-    count += session_preview_counts[session_id]
-  return count 
+    for i in range (0, len(urls)):
+        if urls[i].find(search_url1) != -1 and types[i].find(search_url2) != -1 and queries[i].find(search_url3) != -1:
+           session_addtomylist_counts[session_id] += 1
 
-def get_total_retrieval_counts(my_dict):
-  session_retrieval_counts = get_session_retrieval_counts(my_dict)
-  count = 0
-  for session_id in session_retrieval_counts:
-    count += session_retrieval_counts[session_id]
-  return count 
+    return session_addtomylist_counts 
+       
+def get_session_email_counts(my_dict):
+    count = 0
+    session_email_counts = {}
+    for session_id in my_dict:
+        if session_id not in session_addtomylist_counts:
+           session_addtomylist_counts[session_id] = 0
+        urls = my_dict[session_id]["request_url"]
+        queries = my_dict[session_id]['query']
+        search_url1 = '/do/email'
+        search_url2 = 'set=search'
 
-def get_research_topic_click(my_dict):
-  count = 0
-  for session_id in my_dict:
-    urls = my_dict[session_id]["request_url"]  
-    for url in urls:
-      search_url = "do/issuebrowsenew"
-      if url.find(search_url) != -1:
-        count += 1
-      else:
-        continue
-  return count
+    for i in range (0, len(urls)):
+        if urls[i].find(search_url1) != -1 and queries[i].find(search_url2) != -1:
+           session_email_counts[session_id] += 1
 
-def get_mean_rs_ratio_preview_over_retrieval(my_dict):
-  mean = 0
-  preview = get_session_preview_counts(my_dict)
-  retrieval = get_session_retrieval_counts(my_dict)
-  retrieval_count = 0;
-  for session_id in my_dict:
-    if retrieval[session_id] != 0:
-      retrieval_count += 1
-      mean += preview[session_id] * 1.0 / retrieval[session_id]
+    return session_email_counts 
 
-  mean /= retrieval_count
-  return mean
+def get_session_print_counts(my_dict):
+    count = 0
+    session_print_counts = {}
+    for session_id in my_dict:
+        if session_id not in session_addtomylist_counts:
+           session_addtomylist_counts[session_id] = 0
+        urls = my_dict[session_id]["request_url"]
+        queries = my_dict[session_id]['query']
+        search_url1 = '/do/document'
+        search_url2 = 'set=search'
+        search_url3 = 'style=printable'
 
-def get_session_num(my_dict):
-  return len(get_session_retrieval_counts(my_dict))
-'''
+    for i in range (0, len(urls)):
+        if urls[i].find(search_url1) != -1 and queries[i].find(search_url2) != -1 and queries[i].find(search_url3) != -1:
+           session_print_counts[session_id] += 1
 
+    return session_print_counts 
+ 
 def load(file):
   session_table = dict()
   load_sections(file)
   session_retrieval_table, session_retrieval_from_search = get_session_retrieval_counts(session_dict)
   session_preview_table, session_preview_from_search = get_session_preview_counts(session_dict)
   session_search_table = get_session_search_counts(session_dict)
+  session_addtomylist_table = get_session_addtomylist_counts(session_dict)
+  session_email_table = get_session_email_counts(session_dict)
+  session_print_table = get_session_print_counts(session_dict)
   session_dict.clear()
     
   for session in session_search_table:
@@ -182,12 +190,24 @@ def load(file):
   for session in session_retrieval_from_search:
     session_table[session]["retrieval_from_search"] = session_retrieval_from_search[session]
 
+  for session in session_addtomylist_table:
+    session_table[session]['addtomylist'] = session_addtomylist_table[session]
+
+  for session in session_email_table:
+    session_table[session]['email'] = session_email_table[session]
+
+  for session in session_print_table:
+    session_table[session]['print'] = session_print_table[session]
+
   session_search_table.clear()
   session_retrieval_table.clear()
   session_preview_table.clear()
   session_retrieval_from_search.clear()
   session_preview_from_search.clear()
-
+  session_addtomylist_table.clear()
+  session_email_table.clear()
+  session_print_table.clear()
+ 
   return session_table
 
 def main():
@@ -216,7 +236,8 @@ def main():
         # write session table to a file
         write_filename = write_file_prefix + date
         output_file = open(write_filename, 'w+')
-        output_file.write("session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search, rs_ratio," + newline)
+        header_str = "session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search,rs_ratio,add_to_my_list,email,print" 
+        output_file.write(header_str + newline)
 
         # get session table for a day
         for i in range(101, 102):
@@ -230,7 +251,7 @@ def main():
                 else:
                     total_retrieval_from_search =  value['retrieval_from_search'] + value['preview_from_search']
                     rs_ratio = total_retrieval_from_search / (value['search'] * 1.0) 
-                output_file.write(key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + newline)
+                output_file.write(key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + str(value['addtomylist']) + comma + str(value['email']) + comma + str(value['print']) + comma + newline)
             session_table_for_server_i.clear()
         output_file.close()
     
