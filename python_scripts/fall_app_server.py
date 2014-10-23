@@ -4,6 +4,7 @@ import re
 import os
 import urllib
 import pdb
+import time
 
 fields_name = ["timestamps", "program_name", "product_SKU", "request_type", "request_url", "client_ip", "query", "request_service", "resource_type",
                "resource_id", "description", "result_count", "response_code", "response_time", "user_id", "user_account", "group_account",
@@ -11,6 +12,8 @@ fields_name = ["timestamps", "program_name", "product_SKU", "request_type", "req
                "user_role", "server", "hostname", "owner_id", "search_mode", "delivery_method", "access_method", "selling_method", "contract_type",
                "delivery_format", "document_source", "dumy1", "content_type", "authentication_method", "language", "interface_type", "dumy2",
                "subscription_id", "usage_type", "user_agent"]
+error_msg = open('error'+time.strftime('%Y-%m-%d_%H-%M-%S')+'.log', 'w+')
+satis_msg = open('satis'+time.strftime('%Y-%m-%d_%H-%M-%S')+'.log', 'w+')
 
 # generate dict: 
 #   session_id : dict of (field_name : list of values)
@@ -28,7 +31,7 @@ def load_sections(filename):
         if ((not ip) or ip.find("165.215") != -1):
             continue
     else:
-        print "Error1 @ " + filename + line
+        error_msg.write("Error1 No ip field @ " + filename + line + '\n')
         continue
 
     if (len(fields) >= 20):
@@ -38,12 +41,19 @@ def load_sections(filename):
         query_str = urllib.unquote(fields[6])
         #delete the stirng that might separte a session id
         query_str.replace("\n>","") 
-        ts_start = query_str.find("ts")
+        # Warning: if the arbitrary query string contain ts= 
+        # for non-query purpose this might generate error
+        ts_start = query_str.find("ts=")
         if (ts_start != -1):
             ts_start += 3
             session_id = query_str[ts_start:ts_start+32]
+            formatstr = re.match('([a-fA-F\d]*)',session_id)
+            if (formatstr.group() == ''):
+                error_msg.write("Error2 no session id @ " + filename + line + '\n')
+                continue
         else:
-            print "Error2 @ " + filename + line
+            error_msg.write("Error2 no session id @ " + filename + line + '\n')
+            continue
   
     if session_id not in session_dict:
       session_dict[session_id] = dict()
@@ -63,10 +73,28 @@ def load(file):
     session_table = dict()
     for session_id in session_dict:
         if session_id not in session_table:
-            session_table[session_id] = dict()  
+            session_table[session_id] = dict()
+        
+        if 'request_url' not in session_dict[session_id]:
+            error_msg.write('no request_url in session id: ' + session_id+'\n')
+            error_msg.write( session_dict[session_id])
+            error_msg.write('\n')
+            exit(1)
+        if 'request_service' not in session_dict[session_id]:
+            error_msg.write( 'no request_service in session id: ' + session_id + '\n')
+            error_msg.write( session_dict[session_id])
+            error_msg.write('\n')
+            exit(1)
+        if 'query' not in session_dict[session_id]:
+            error_msg.write('no query in session id: ' + session_id + '\n') 
+            error_msg.write(session_dict[session_id])
+            error_msg.write('\n')
+            exit(1)
         urls = session_dict[session_id]["request_url"]
         types = session_dict[session_id]["request_service"]
         queries = session_dict[session_id]["query"]
+        if (len(urls) != len(types) or len(types) != len(queries)):
+            error_msg.write('Error: field length don\' match @ ' + file + ' session: ' + session_id +'\n')
         get_features(session_table[session_id], urls, types, queries)
     return session_table    
 
@@ -185,17 +213,29 @@ def main():
     write_file_prefix = '/home/ec2-user/UMMDP14/app_server_parsed/'
     comma = ','
     newline = '\n'
+    header_str = "session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search," + \
+                        "rs_ratio,add_to_my_list,email,print,export_easylib," 
+    satis_msg.write(header_str + newline)
+    cont_run = False
     for date in ordered_date:
         # write session table to a file
         write_filename = write_file_prefix + date
         output_file = open(write_filename, 'w+')
-        header_str = "session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search," + \
-                            "rs_ratio,add_to_my_list,email,print,export_easylib," 
         output_file.write(header_str + newline)
 
         # get session table for a day
         for i in range(101, 116):
+            if (date not in app_server[i]['files']):
+                error_msg.write('Error: no logfile for date: ' + date + 'on server: ' + str(i) + '\n')
+                continue
+
+            if (date == '2014-09-23'):
+                cont_run = True
+            if (not cont_run):
+                continue
+ 
             path = app_server[i]['files'][date]
+
             if (os.path.exists(path)):
                 session_table_for_server_i = load(path) 
             for key, value in session_table_for_server_i.iteritems():
@@ -212,9 +252,9 @@ def main():
                                 str(value['email']) + comma + str(value['print']) + comma + \
                                 str(value['export_easylib']) + comma + newline)
            
-                 # for collection purpose
+                # for collection purpose
                 if (value['addtomylist'] != 0 or value['email'] != 0 or value['print'] != 0 or value['export_easylib'] != 0):
-                    print 'Find satisfaction point @ ' + key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + str(value['addtomylist']) + comma + str(value['email']) + comma + str(value['print']) + comma + str(value['export_easylib'])+ comma + newline
+                    satis_msg.write(key + comma + date + comma + str(value['search']) + comma + str(value['retrieval']) + comma + str(value['retrieval_from_search']) + comma + str(value['preview']) + comma +str(value["preview_from_search"]) + comma + str(rs_ratio) + comma + str(value['addtomylist']) + comma + str(value['email']) + comma + str(value['print']) + comma + str(value['export_easylib'])+ comma + newline)
             
             session_table_for_server_i.clear()
         output_file.close()
