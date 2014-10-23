@@ -22,10 +22,14 @@ def load_sections(filename):
   for line in region_file:
     index = 0
     fields = line.split(";;|")
-    # filter out internal ip
-    ip = fields[5]
-    if ((not ip) or ip.find("165.215") != -1):
-        continue 
+    if (len(fields) >=5):
+        # filter out internal ip
+        ip = fields[5]
+        if ((not ip) or ip.find("165.215") != -1):
+            continue
+    else:
+        print "Error1 @ " + filename + line
+        continue
 
     if (len(fields) >= 20):
         session_id = fields[20]
@@ -39,7 +43,7 @@ def load_sections(filename):
             ts_start += 3
             session_id = query_str[ts_start:ts_start+32]
         else:
-            print "Error @ " + filename + line
+            print "Error2 @ " + filename + line
   
     if session_id not in session_dict:
       session_dict[session_id] = dict()
