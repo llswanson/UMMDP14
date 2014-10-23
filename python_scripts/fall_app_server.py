@@ -185,8 +185,8 @@ def main():
         # write session table to a file
         write_filename = write_file_prefix + date
         output_file = open(write_filename, 'w+')
-        header_str = "session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search,\
-                            rs_ratio,add_to_my_list,email,print,export_easylib," 
+        header_str = "session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search," + \
+                            "rs_ratio,add_to_my_list,email,print,export_easylib," 
         output_file.write(header_str + newline)
 
         # get session table for a day
