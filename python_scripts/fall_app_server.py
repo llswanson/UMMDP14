@@ -216,7 +216,6 @@ def main():
     header_str = "session_id,date,search,retrieval,retrieval_from_search,preview,preview_from_search," + \
                         "rs_ratio,add_to_my_list,email,print,export_easylib," 
     satis_msg.write(header_str + newline)
-    cont_run = False
     for date in ordered_date:
         # write session table to a file
         write_filename = write_file_prefix + date
@@ -229,11 +228,6 @@ def main():
                 error_msg.write('Error: no logfile for date: ' + date + 'on server: ' + str(i) + '\n')
                 continue
 
-            if (date == '2014-09-23'):
-                cont_run = True
-            if (not cont_run):
-                continue
- 
             path = app_server[i]['files'][date]
 
             if (os.path.exists(path)):
