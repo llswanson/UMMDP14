@@ -24,7 +24,7 @@ def load_sections(filename):
     fields = line.split(";;|")
     # filter out internal ip
     ip = fields[5]
-    if (ip.find("165.215") != -1):
+    if ((not ip) or ip.find("165.215") != -1):
         continue 
 
     if (len(fields) >= 20):
