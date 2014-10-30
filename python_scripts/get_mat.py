@@ -17,15 +17,15 @@ def main():
     for line in satisfile:
         fields = line.split(',')
         #search3,retrieval4,retrieval_from_search5,preview6,preview_from_search7,
-        #rs_ratio8,add_to_my_list9,email10,print11,export_easylib12
-        list = [int(fields[2]),int(fields[3]),int(fields[4]),int(fields[5]),int(fields[6]),int(fields[8]),int(fields[9]),int(fields[10]),int(fields[11])]
+        #rs_ratio8,add_to_my_list9,email10,prfloat11,export_easylib12
+        list = [float(fields[2]),float(fields[3]),float(fields[4]),float(fields[5]),float(fields[6]),float(fields[8]),float(fields[9]),float(fields[10]),float(fields[11])]
         data['satisx'].append(list)
         data['satist'].append(1)
     for line in unsatisfile:
         fields = line.split(',')
         #search3,retrieval4,retrieval_from_search5,preview6,preview_from_search7,
-        #rs_ratio8,add_to_my_list9,email10,print11,export_easylib12
-        list = [int(fields[2]),int(fields[3]),int(fields[4]),int(fields[5]),int(fields[6]),int(fields[8]),int(fields[9]),int(fields[10]),int(fields[11])]
+        #rs_ratio8,add_to_my_list9,email10,prfloat11,export_easylib12
+        list = [float(fields[2]),float(fields[3]),float(fields[4]),float(fields[5]),float(fields[6]),float(fields[8]),float(fields[9]),float(fields[10]),float(fields[11])]
         data['unsatisx'].append(list)
         data['unsatist'].append(-1)
     pdb.set_trace()
