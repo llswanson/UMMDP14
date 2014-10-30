@@ -20,14 +20,14 @@ def main():
         #rs_ratio8,add_to_my_list9,email10,prfloat11,export_easylib12
         list = [float(fields[2]),float(fields[3]),float(fields[4]),float(fields[5]),float(fields[6]),float(fields[8]),float(fields[9]),float(fields[10]),float(fields[11])]
         data['satisx'].append(list)
-        data['satist'].append(1)
+        data['satist'].append(1.0)
     for line in unsatisfile:
         fields = line.split(',')
         #search3,retrieval4,retrieval_from_search5,preview6,preview_from_search7,
         #rs_ratio8,add_to_my_list9,email10,prfloat11,export_easylib12
         list = [float(fields[2]),float(fields[3]),float(fields[4]),float(fields[5]),float(fields[6]),float(fields[8]),float(fields[9]),float(fields[10]),float(fields[11])]
         data['unsatisx'].append(list)
-        data['unsatist'].append(-1)
+        data['unsatist'].append(-1.0)
     pdb.set_trace()
     savemat('two_day.mat', data)
     return
