@@ -1,0 +1,66 @@
+[LibLinear].*
+optimization finished, #iter = 12
+Objective value = -0.017486
+nSV = 37806
+using C=: 1e-06 accuracy: 72.98%
+parameters: [[ 0.00971962  0.00299646  0.00349515  0.00380318  0.00380318  0.01231878
+   0.02800655  0.02800655  0.01372614 -0.01081721]]
+[LibLinear].*
+optimization finished, #iter = 12
+Objective value = -0.077241
+nSV = 37029
+using C=: 5e-06 accuracy: 83.05%
+parameters: [[ 0.03651343  0.01017393  0.01563114  0.00726238  0.00726238  0.04402974
+   0.05748972  0.05748972  0.03019935 -0.04508983]]
+[LibLinear].*
+optimization finished, #iter = 12
+Objective value = -0.144095
+nSV = 36587
+using C=: 1e-05 accuracy: 91.92%
+parameters: [[ 0.06276495  0.01809077  0.02987694  0.00937797  0.00937797  0.0753565
+   0.07365611  0.07365611  0.03992661 -0.06344612]]
+[LibLinear]*.
+optimization finished, #iter = 10
+Objective value = -0.576856
+nSV = 35435
+using C=: 5e-05 accuracy: 95.93%
+parameters: [[ 0.19479617  0.0753405   0.12953161  0.01354979  0.01354979  0.25055531
+   0.10050146  0.10050146  0.07271348 -0.08968632]]
+[LibLinear].*
+optimization finished, #iter = 13
+Objective value = -1.001186
+nSV = 34946
+using C=: 0.0001 accuracy: 97.16%
+parameters: [[ 0.29565019  0.13976153  0.2313113   0.01408105  0.01408105  0.39953969
+   0.10054176  0.10054176  0.0939203  -0.08893083]]
+[LibLinear]..*.
+optimization finished, #iter = 30
+Objective value = -2.984433
+nSV = 33550
+using C=: 0.0005 accuracy: 99.40%
+parameters: [[ 0.68791906  0.49131378  0.68856914  0.01168023  0.01168023  0.97346293
+   0.07464494  0.07464494  0.12961009 -0.06651404]]
+[LibLinear].....*
+optimization finished, #iter = 51
+Objective value = -4.270876
+nSV = 33176
+using C=: 0.001 accuracy: 99.85%
+parameters: [[ 0.93526419  0.74940495  0.99622396  0.01119747  0.01119747  1.27757711
+   0.05884912  0.05884912  0.11940813 -0.05377871]]
+[LibLinear].............*
+optimization finished, #iter = 132
+Objective value = -7.017646
+nSV = 32509
+using C=: 0.005 accuracy: 99.99%
+parameters: [[ 1.61979899  1.50910814  1.65574468  0.00503774  0.00503774  1.77746047
+   0.02107618  0.02107618  0.05156779 -0.01975132]]
+[LibLinear].......................*
+optimization finished, #iter = 232
+Objective value = -7.680336
+nSV = 32366
+using C=: 0.01 accuracy: 100.00%
+parameters: [[ 1.79003346  1.72319942  1.81115995  0.00281967  0.00281967  1.88010652
+   0.01157332  0.01157332  0.02960043 -0.01083418]]
+final using C= 0.01 accuracy: 100.00%
+parameters: [[ 1.80565752  1.74320081  1.82520669  0.00247764  0.00247764  1.88929169
+   0.01054626  0.01054626  0.02869575 -0.00992851]]

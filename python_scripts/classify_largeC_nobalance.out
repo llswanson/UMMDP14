@@ -1,0 +1,136 @@
+[LibLinear]..................................****
+optimization finished, #iter = 349
+Objective value = -7.544056
+nSV = 25017
+using C=: 0.010000% accuracy: 0.01%
+parameters: [[ 1.74094081  1.66615524  1.76827365  0.00571926  0.00571926  1.88003008
+   0.00902819  0.00902819  0.03933898 -0.01286684]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.286405
+nSV = 25009
+using C=: 0.050000% accuracy: 0.05%
+parameters: [[  1.94214201e+00   1.92352262e+00   1.94877883e+00   1.27114495e-03
+    1.27114495e-03   1.97441914e+00   1.97787783e-03   1.97787783e-03
+    9.10222336e-03  -2.83942765e-03]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.391602
+nSV = 25009
+using C=: 0.100000% accuracy: 0.10%
+parameters: [[  1.97063786e+00   1.96105112e+00   1.97404439e+00   6.46467147e-04
+    6.46467147e-04   1.98709740e+00   1.00280696e-03   1.00280696e-03
+    4.63505198e-03  -1.43967531e-03]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.478014
+nSV = 25012
+using C=: 0.500000% accuracy: 0.50%
+parameters: [[  1.99400253e+00   1.99203203e+00   1.99472682e+00   1.34645975e-04
+    1.34645975e-04   1.99738542e+00   2.11197506e-04   2.11197506e-04
+    9.35554896e-04  -3.02392454e-04]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.488919
+nSV = 25024
+using C=: 1.000000% accuracy: 1.00%
+parameters: [[  1.99694765e+00   1.99595227e+00   1.99734481e+00   7.18948833e-05
+    7.18948833e-05   1.99868060e+00   1.13118414e-04   1.13118414e-04
+    4.64642727e-04  -1.60951720e-04]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.497564
+nSV = 24988
+using C=: 5.000000% accuracy: 5.00%
+parameters: [[  1.99933388e+00   1.99911946e+00   1.99944301e+00   1.84691124e-05
+    1.84691124e-05   1.99971313e+00   3.02389836e-05   3.02389836e-05
+    9.15648796e-05  -4.55139968e-05]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.498633
+nSV = 24981
+using C=: 10.000000% accuracy: 10.00%
+parameters: [[  1.99963037e+00   1.99953516e+00   1.99971126e+00   1.46759438e-05
+    1.46759438e-05   1.99983663e+00   2.45871729e-05   2.45871729e-05
+    5.23200490e-05  -1.68735408e-05]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.499334
+nSV = 26229
+using C=: 50.000000% accuracy: 50.00%
+parameters: [[  1.99991245e+00   1.99990633e+00   1.99994559e+00  -5.04877210e-06
+   -5.04877210e-06   1.99995477e+00   8.55761474e-06   8.55761474e-06
+    3.00932549e-06  -4.44377808e-06]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.499210
+nSV = 26986
+using C=: 100.000000% accuracy: 100.00%
+parameters: [[  1.99996621e+00   1.99995616e+00   1.99996692e+00   2.51925609e-06
+    2.51925609e-06   1.99998675e+00   1.03225390e-06   1.03225390e-06
+   -4.25099719e-06  -5.50493425e-07]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.499321
+nSV = 29305
+using C=: 500.000000% accuracy: 500.00%
+parameters: [[  1.99999426e+00   1.99999241e+00   1.99999607e+00   4.13653321e-07
+    4.13653321e-07   1.99999854e+00   2.46772509e-07   2.46772509e-07
+    4.17535008e-07  -2.43306525e-07]]
+[LibLinear]....................................................................................................
+optimization finished, #iter = 1000
+
+WARNING: reaching max number of iterations
+Using -s 2 may be faster (also see FAQ)
+
+Objective value = -8.499697
+nSV = 30731
+using C=: 1000.000000% accuracy: 1000.00%
+parameters: [[  1.99999654e+00   1.99998802e+00   1.99999963e+00   3.88594038e-07
+    3.88594038e-07   2.00000049e+00   2.18922384e-07   2.18922384e-07
+   -3.20803433e-07  -1.27578761e-08]]
+[LibLinear]......................................................................................**
+optimization finished, #iter = 864
+Objective value = -7.633004
+nSV = 50433
+final using C= 0.01  accuracy: 100.00%
+parameters: [[ 1.77132427  1.68678255  1.78502481  0.00514768  0.00514768  1.89672236
+    0.00614721  0.00614721  0.03212258 -0.0102733 ]]
+~
+
