@@ -1,4 +1,3 @@
-# should run with python 2.6 on EC2
 from scipy.io import savemat
 import sys
 import csv
