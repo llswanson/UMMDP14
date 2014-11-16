@@ -13,6 +13,21 @@ from nltk.classify.scikitlearn import SklearnClassifier
 
 feature_key = ['search','retrieval','retrieval_from_search','preview','preview_from_search','rs_ratio','add_to_my_list','email','print','export_easylib']
 
+def train2years():
+    output = open('classify/classify_20132014oct', 'a')
+    train1310, test1310 = get_sets('2013-10')
+    train1410, test1410 = get_sets('2014-10')
+    train_total = np.concatenate([train1310, train1410])
+    test_total = np.concatenate([test1310, test1410])
+    bestC = validate_model(train_total, output)
+    svm_classifier13 = train_model(bestC, train1310, test1310, output)
+    svm_classifier14 = train_model(bestC, train1410, test1410, output)
+    pos13, neg13 = predict_month('2013-10', svm_classifier13)
+    pos14, neg14 = predict_month('2014-10', svm_classifier14)
+    output.write('----\n2013-10 predict number: positive = ' + str(pos13) + ' negative = ' + str(neg13) + '\n')
+    output.write('----\n2014-10 predict number: positive = ' + str(pos14) + ' negative = ' + str(neg14) + '\n')
+    return
+
 # year_month: yyyy-mm
 def classify_month(year_month):
     print 'this thread: ' + threading.currentThread().getName()
@@ -138,3 +153,4 @@ def predict_month(year_month, svm_classifier):
     return positive, negative 
 
 #classify_month('2014-10')
+train2years()
